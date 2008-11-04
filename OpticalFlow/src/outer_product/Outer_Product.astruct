@@ -1,0 +1,141 @@
+package outer_product;
+import astruct.primitives.DupFork;
+import utility.Shift_Saturate;
+import utility.Shift;
+
+
+interface Outer_Product
+{
+	inbound dx_smooth;
+	inbound dy_smooth;
+	inbound dt_smooth;
+	
+	outbound g_xx;
+	outbound g_xy;
+	outbound g_xt;
+	outbound g_yy;
+	outbound g_yt;
+	outbound g_tt;
+	
+	property boolean match_roger=false;
+}
+binding jOuter_Product implements Outer_Product
+{
+	Outer_Product1 op1;
+	Outer_Product2 op2;
+	DupFork split_dy;
+	DupFork split_dt;
+	void generate()
+	{
+		if(match_roger)
+		{
+			/*
+			Shift_and_Saturate ssx = { shift_by = 3, max = 127, min = -128 };
+			Shift_and_Saturate ssy = { shift_by = 3, max = 127, min = -128 };
+			Shift_and_Saturate sst = { shift_by = 3, max = 127, min = -128 };
+			/**/
+			int shift_by = 10;
+			int max = 8191;
+			int min = -8192;
+			Shift_Saturate ssxx = { shift_by = shift_by, max = max, min = min };
+			Shift_Saturate ssxy = { shift_by = shift_by, max = max, min = min };
+			Shift_Saturate ssxt = { shift_by = shift_by, max = max, min = min };
+			Shift_Saturate ssyy = { shift_by = shift_by, max = max, min = min };
+			Shift_Saturate ssyt = { shift_by = shift_by, max = max, min = min };
+			Shift_Saturate sstt = { shift_by = shift_by, max = max, min = min };
+			/*
+			Saturate ssx = {max = 127, min = -128 };
+			Saturate ssy = {max = 127, min = -128 };
+			Saturate sst = {max = 127, min = -128 };
+			
+			Shift ssx = { shift_by = 3};
+			Shift ssy = { shift_by = 3};
+			Shift sst = { shift_by = 3};
+			*/
+			
+			channel dup1={dy_smooth, split_dy.in};
+			channel dup2={dt_smooth, split_dt.in};
+			
+			channel c0={dx_smooth, op1.dx_smooth};
+			channel c1={split_dy.left, op1.dy_smooth};
+			channel c2={split_dt.left, op1.dt_smooth};
+		
+			channel c4={split_dy.right, op2.dy_smooth};
+			channel c5={split_dt.right, op2.dt_smooth};
+			
+			channel c6  = {op1.g_xx, ssxx.in};
+			channel c6o = {ssxx.out, g_xx};
+			
+			channel c7  = {op1.g_xy, ssxy.in};
+			channel c7o = {ssxy.out, g_xy};
+			
+			channel c8  = {op1.g_xt, ssxt.in};
+			channel c8o = {ssxt.out, g_xt};
+			channel c9  = {op2.g_yy, ssyy.in};
+			channel c90 = {ssyy.out, g_yy};
+			channel c10 = {op2.g_yt, ssyt.in};
+			channel c10o = {ssyt.out, g_yt};
+			channel c11 = {op2.g_tt, sstt.in};
+			channel c11o = {sstt.out, g_tt};
+		}
+		else
+		{
+			int shift_by = 6;
+			Shift shiftx = {shift_by=shift_by};
+			Shift shifty = {shift_by=shift_by};
+			Shift shiftt = {shift_by=shift_by};
+			
+			channel x_in = {dx_smooth, shiftx.in};
+			channel y_in = {dy_smooth, shifty.in};
+			channel t_in = {dt_smooth, shiftt.in};
+			
+			channel dup1={shifty.out, split_dy.in};
+			channel dup2={shiftt.out, split_dt.in};
+			
+			channel c0={shiftx.out, op1.dx_smooth};
+			channel c1={split_dy.left, op1.dy_smooth};
+			channel c2={split_dt.left, op1.dt_smooth};
+		
+			channel c4={split_dy.right, op2.dy_smooth};
+			channel c5={split_dt.right, op2.dt_smooth};
+			
+			channel c6={op1.g_xx, g_xx};
+			channel c7={op1.g_xy, g_xy};
+			channel c8={op1.g_xt, g_xt};
+			channel c9={op2.g_yy, g_yy};
+			channel c10={op2.g_yt, g_yt};
+			channel c11={op2.g_tt, g_tt};
+		}
+	}
+	
+}
+
+interface Outer_Product1
+{
+	inbound dx_smooth;
+	inbound dy_smooth;
+	inbound dt_smooth;
+	
+	outbound g_xx;
+	outbound g_xy;
+	outbound g_xt;
+}
+binding jOuter_Product1 implements Outer_Product1
+{
+	implementation "Outer_Product1.java";
+}
+
+interface Outer_Product2
+{
+	inbound dy_smooth;
+	inbound dt_smooth;
+	
+	outbound g_yy;
+	outbound g_yt;
+	outbound g_tt;
+}
+binding jOuter_Product2 implements Outer_Product2
+{
+	implementation "Outer_Product2.java";
+}
+

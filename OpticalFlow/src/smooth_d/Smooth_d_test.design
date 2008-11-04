@@ -1,0 +1,40 @@
+package smooth_d;
+import astruct.pcie.Vio;
+import derivitive.Derivitive;
+
+const int width = 316;
+const int height = 252;
+const boolean match_roger = true;
+interface RootTest{}
+
+design Smooth_d_test
+{
+	RootTest root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements RootTest
+{
+	Vio vio = {numSources=1, numSinks=3};
+	Derivitive dx_dy_dt = {width=width, height=height, match_roger = match_roger};
+	//just lost edge pixels w-4
+	Smooth_d smooth_dx = {width=width-4, height=height-4, controller_port=0, match_roger=match_roger};
+	Smooth_d smooth_dy = {width=width-4, height=height-4, controller_port=1, match_roger=match_roger};
+	Smooth_d smooth_dt = {width=width-4, height=height-4, controller_port=2, match_roger=match_roger};
+	channel c0 = {vio.out[0],dx_dy_dt.in};
+	channel c1 = {dx_dy_dt.dx_out, smooth_dx.in};
+	channel c2 = {dx_dy_dt.dy_out, smooth_dy.in};
+	channel c3 = {dx_dy_dt.dt_out, smooth_dt.in};
+	
+	//channel cx0 = {vio.out[0], smooth_dx.in};
+	channel cx1 = {smooth_dx.out, vio.in[0]};
+	
+	//channel cy0 = {vio.out[1], smooth_dy.in};
+	channel cy1 = {smooth_dy.out, vio.in[1]};
+	
+	//channel ct0 = {vio.out[2], smooth_dt.in};
+	channel ct1 = {smooth_dt.out, vio.in[2]};
+}

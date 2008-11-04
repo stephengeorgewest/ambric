@@ -1,0 +1,111 @@
+package smooth_op;
+
+import utility.Shift;
+import utility.Shift_Saturate;
+
+interface Smooth_OP
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+	property boolean match_roger = false;
+}
+binding aSmooth_OP implements Smooth_OP
+{
+	Conv_x_5_6_5 conv_x={width=width};
+	//just lost 2 edge pixels
+	Conv_y_5_6_5_w_fifos conv_y={width=width-2, height=height};
+	void generate()
+	{
+		if(match_roger)
+		{
+			int shift_by = 3;
+			int max = 16383;
+			int min = -16384;
+			/*
+			
+			/**/
+			Shift_Saturate ssx = {shift_by=shift_by, max = 16383, min = -16384};
+			Shift_Saturate ssy = {shift_by=shift_by, max = 32767, min = -32768};
+			channel c0 = {in, conv_x.in};
+			channel c1 = {conv_x.out, ssx.in};
+			channel c2 = {ssx.out, conv_y.in};
+			
+
+			channel c3 = {conv_y.out, ssy.in};
+			/**/
+			
+			channel c4 = {ssy.out, out};
+		}
+		else
+		{
+			int shift_by = 4;
+			/*
+			channel c0 = {in, conv_x.in};
+			channel c1 = {conv_x.out, conv_y.in};
+			/**/
+			Shift shiftx = {shift_by=shift_by};
+			Shift shifty = {shift_by=shift_by};
+			channel c00 = {in, shiftx.in};
+			channel c01 = {shiftx.out, conv_x.in};
+			channel c10 = {conv_x.out, shifty.in};
+			channel c11 = {shifty.out, conv_y.in};
+			/**/
+			
+			channel c2 = {conv_y.out, out};
+		}
+	}
+}
+
+
+interface Conv_x_5_6_5
+{
+	inbound in;
+	outbound out;
+	property int width;
+}
+binding jConv_x_5_6_5 implements Conv_x_5_6_5
+{
+	implementation "Conv_x_5_6_5.java";
+}
+
+
+
+
+interface Conv_y_5_6_5_w_fifos
+{
+	inbound in;
+	outbound out;
+	property int width;
+	property int height;
+}
+binding aConv_y_5_6_5_w_fifos implements Conv_y_5_6_5_w_fifos
+{
+	Conv_y_5_6_5 conv_y = {width=width,height=height};
+	
+	channel c0={in, conv_y.in};
+		channel c0middle={conv_y.fifo_1_in, conv_y.fifo_1_out};
+			attribute MinimumBuffer(width) on conv_y.fifo_1_in;
+		channel c0top={conv_y.fifo_0_in, conv_y.fifo_0_out};
+			attribute MinimumBuffer(width) on conv_y.fifo_0_in;
+	channel c1={conv_y.out, out};
+}
+
+interface Conv_y_5_6_5
+{
+	inbound in;
+	outbound fifo_1_in;
+	inbound fifo_1_out;
+	outbound fifo_0_in;
+	inbound fifo_0_out;
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding jConv_y_5_6_5 implements Conv_y_5_6_5
+{
+	implementation "Conv_y_5_6_5.java";
+}

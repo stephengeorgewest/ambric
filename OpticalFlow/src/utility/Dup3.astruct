@@ -1,0 +1,14 @@
+package utility;
+
+interface Dup3
+{
+	inbound in;
+	
+	outbound out_1;
+	outbound out_2;
+	outbound out_3;
+}
+binding jDup3 implements Dup3
+{
+	implementation "Dup3.java";
+}

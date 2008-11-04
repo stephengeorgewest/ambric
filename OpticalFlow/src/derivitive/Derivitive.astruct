@@ -1,0 +1,85 @@
+package derivitive;
+
+//import astruct.primitives.Fifo;
+import utility.Shift_and_Saturate;
+import utility.Shift_Saturate;
+import utility.Saturate;
+import utility.Shift;
+
+interface Derivitive
+{
+	inbound in;
+	outbound dx_out;
+	outbound dy_out;
+	outbound dt_out;
+	
+	property int width;
+	property int height;
+	property boolean match_roger = false;
+}
+binding aDerivitive implements Derivitive
+{
+	D_split split = {width=width, height=height};//only feeds the pixels that each kernel needs
+	DDR_delay dx_delay = {width=width, height=height-4, offset=(width-4)*(height-4)*5, port =1};
+	Dx dx = {width=width};//this is not fed top or bottom pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
+	DDR_delay dy_delay = {width=width-4, height=height, offset=(width-4)*(height-4)*5+3*width*(height-4), port =2};// past the dt frames and the dx frames
+	Dy dy = {width=width-4, height=height};//this is not fed left or right pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
+	Dt dt = {width=width-4, height=height-4};// not fed border pixels  // they are ignored to keep the 3 blocks symmetric
+	void generate()
+	{
+		if(match_roger)
+		{
+			/*
+			Shift_and_Saturate ssx = { shift_by = 3, max = 127, min = -128 };
+			Shift_and_Saturate ssy = { shift_by = 3, max = 127, min = -128 };
+			Shift_and_Saturate sst = { shift_by = 3, max = 127, min = -128 };
+			/**/
+			Shift_Saturate ssx = { shift_by = 3, max = 127, min = -127 };
+			Shift_Saturate ssy = { shift_by = 3, max = 127, min = -127 };
+			Shift_Saturate sst = { shift_by = 3, max = 127, min = -127 };
+			/*
+			Saturate ssx = {max = 127, min = -128 };
+			Saturate ssy = {max = 127, min = -128 };
+			Saturate sst = {max = 127, min = -128 };
+			/*
+			Shift ssx = { shift_by = 3};
+			Shift ssy = { shift_by = 3};
+			Shift sst = { shift_by = 3};
+			/**/
+			channel c0 = {in, split.in};
+			
+			channel cx0 = {split.dx, dx_delay.in};
+			channel cxa = {dx_delay.out, dx.in};
+			channel cx1 = {dx.out, ssx.in};
+			channel cx2 = {ssx.out, dx_out};
+			
+			channel cy0 = {split.dy, dy_delay.in};
+			channel cya = {dy_delay.out, dy.in};
+			channel cy1 = {dy.out, ssy.in};
+			channel cy2 = {ssy.out, dy_out};
+
+			channel ct0 = {split.dt, dt.in};
+			channel ct1 = {dt.out, sst.in};
+			channel ct2 = {sst.out, dt_out};
+		}
+		else
+		{
+			channel c0 = {in, split.in};
+			
+			channel cx0 = {split.dx, dx_delay.in};
+			channel cxa = {dx_delay.out, dx.in};
+			channel cx1 = {dx.out,dx_out};
+			
+			channel cy0 = {split.dy, dy_delay.in};
+			channel cya = {dy_delay.out, dy.in};
+			channel cy1 = {dy.out, dy_out};
+			
+			channel ct0 = {split.dt, dt.in};
+			channel ct1 = {dt.out, dt_out};
+		}
+		attribute MinimumBuffer(4*width) on dx.out;
+		attribute MinimumBuffer(4*width) on dt.out;
+	}
+	
+}
+

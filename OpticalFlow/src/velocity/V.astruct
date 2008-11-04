@@ -1,0 +1,112 @@
+package velocity;
+import astruct.primitives.DupFork;
+import utility.Dup3;
+
+interface V
+{
+	inbound k;
+	inbound xx;
+	inbound xy;
+	inbound xt;
+	inbound yy;
+	inbound yt;
+	
+	outbound Vx;
+	outbound Vy;
+	outbound denominator;
+	
+	property int fraction_bits;
+}
+binding aV implements V
+{
+	Dup3     k_split;
+	DupFork xx_split;
+	Dup3    xy_split;
+	DupFork xt_split;
+	DupFork yy_split;
+	DupFork yt_split;
+	
+	Velocity_x Vel_x;
+	Velocity_y Vel_y;
+	Velocity_denominator Vel_den;
+	Dup3 den_split;
+	
+	Divider div_x = {fraction_bits=fraction_bits, max_int = 7};
+	Divider div_y = {fraction_bits=fraction_bits, max_int = 7};
+	
+	channel c0 = {k,   k_split.in};
+	channel c1 = {yy, yy_split.in};
+	channel c2 = {xx, xx_split.in};
+	channel c3 = {xy, xy_split.in};
+	channel c4 = {xt, xt_split.in};
+	channel c5 = {yt, yt_split.in};
+	
+	channel cx1 = {k_split.out_1,  Vel_x.k};
+	channel cx2 = {yy_split.left, Vel_x.yy};
+	channel cx3 = {xt_split.left, Vel_x.xt};
+	channel cx4 = {yt_split.left, Vel_x.yt};
+	channel cx5 = {xy_split.out_1, Vel_x.xy};
+	
+	channel cy1 = {k_split.out_2,   Vel_y.k};
+	channel cy2 = {xx_split.left,  Vel_y.xx};
+	channel cy3 = {xt_split.right, Vel_y.xt};
+	channel cy4 = {yt_split.right, Vel_y.yt};
+	channel cy5 = {xy_split.out_2,  Vel_y.xy};
+	
+	channel cden1 = {k_split.out_3,   Vel_den.k};
+	channel cden2 = {yy_split.right, Vel_den.yy};
+	channel cden3 = {xx_split.right, Vel_den.xx};
+	channel cden5 = {xy_split.out_3,  Vel_den.xy};
+	channel cden6 = {Vel_den.denominator, den_split.in};
+	
+	channel cdivx1 = {Vel_x.Vx_numerator, div_x.numerator};
+	channel cdivx2 = {den_split.out_1, div_x.denominator};
+	
+	channel cdivy1 = {Vel_y.Vy_numerator, div_y.numerator};
+	channel cdivy2 = {den_split.out_2, div_y.denominator};
+
+	channel cout1 = {div_x.value, Vx};
+	channel cout2 = {div_y.value, Vy};
+	channel cout3 = {den_split.out_3, denominator};
+	
+}
+interface Velocity_x
+{
+	inbound k;
+	inbound xy;
+	inbound xt;
+	inbound yt;
+	inbound yy;
+	
+	outbound Vx_numerator;
+}
+binding jVelocity_x implements Velocity_x
+{
+	implementation "Velocity_x.java";
+}
+interface Velocity_y
+{
+	inbound k;
+	inbound xx;
+	inbound xy;
+	inbound xt;
+	inbound yt;
+	
+	outbound Vy_numerator;
+}
+binding jVelocity_d implements Velocity_y
+{
+	implementation "Velocity_y.java";
+}
+interface Velocity_denominator
+{
+	inbound k;
+	inbound xx;
+	inbound xy;
+	inbound yy;
+	outbound denominator;
+}
+binding jVelocity_denominator implements Velocity_denominator
+{
+	implementation "Velocity_denominator.java";
+}

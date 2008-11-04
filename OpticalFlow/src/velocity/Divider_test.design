@@ -1,0 +1,22 @@
+package velocity;
+import astruct.pcie.Vio;
+
+interface Root{}
+design Divider_test
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=2, numSinks=1};
+	Divider div;
+	
+	channel c0 = {vio.out[0], div.numerator};
+	channel c2 = {vio.out[1], div.denominator};
+	channel c4 = {div.value, vio.in[0]};
+}

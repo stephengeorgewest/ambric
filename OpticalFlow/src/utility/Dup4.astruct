@@ -1,0 +1,16 @@
+package utility;
+
+
+interface Dup4
+{
+	inbound in;
+	
+	outbound out1;
+	outbound out2;
+	outbound out3;
+	outbound out4;
+}
+binding jDup4 implements Dup4
+{
+	implementation "Dup4.java";
+}

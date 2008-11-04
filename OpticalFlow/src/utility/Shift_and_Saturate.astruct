@@ -1,0 +1,16 @@
+package utility;
+
+interface Shift_and_Saturate
+{
+	inbound in;
+	outbound out;
+	
+	property int shift_by;
+	property int max;
+	property int min;
+}
+binding jShift_and_Saturate implements Shift_and_Saturate
+{
+	implementation "Shift_and_Saturate.java";
+	attribute CompilerOptions (targetSR=true) on jShift_and_Saturate;
+}

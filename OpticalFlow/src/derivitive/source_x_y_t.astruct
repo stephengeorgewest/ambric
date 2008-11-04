@@ -1,0 +1,13 @@
+package derivitive;
+
+interface source_x_y_t
+{
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding jSource_x_y_t implements source_x_y_t
+{
+	implementation "source_x_y_t.java";
+}

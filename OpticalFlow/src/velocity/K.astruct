@@ -1,0 +1,107 @@
+package velocity;
+
+import astruct.primitives.DupFork;
+import astruct.primitives.Source;
+import utility.Shift;
+
+interface K_calc
+{
+	inbound Vx;
+	inbound Vy;
+	
+	inbound xx;
+	inbound xy;
+	inbound xt;
+	inbound yy;
+	inbound yt;
+	inbound tt;
+	
+	inbound denominator;
+	
+	outbound K;
+	
+	property boolean match_roger = false;
+	property int fraction_bits;
+}
+binding aK implements K_calc
+{
+	K_1 k1 = {fraction_bits = fraction_bits};
+	K_2 k2 = {fraction_bits = fraction_bits};
+	Add add;
+	DupFork den_fork;
+	DupFork vx_fork;
+	Shift shift = {shift_by = fraction_bits};
+	Source constant_28 = { initialValue = 28, incrementValue = 0 };
+	Divider div = {fraction_bits = 0, max_int = 0xFFFF};
+	
+	channel c0 = {Vx, vx_fork.in};
+	channel c1 = {denominator, den_fork.in};
+	
+	channel ck11 = {vx_fork.left, k1.Vx};
+	channel ck12 = {xx, k1.xx};
+	channel ck13 = {xt, k1.xt};
+	channel ck14 = {tt, k1.tt};
+	channel ck15 = {den_fork.left, k1.denominator};
+	
+	channel ck21 = {vx_fork.right, k2.Vx};
+	channel ck22 = {Vy, k2.Vy};
+	channel ck23 = {xy, k2.xy};
+	channel ck24 = {yy, k2.yy};
+	channel ck25 = {yt, k2.yt};
+	channel ck26 = {den_fork.right, k2.denominator};
+	
+	channel ca1 = {k1.k1, add.in_1};
+	channel ca2 = {k2.k2, add.in_2};
+	
+	channel cd1 = {add.out, shift.in};
+	channel cd2 = {shift.out, div.numerator};
+	channel cd3 = {constant_28.out, div.denominator};
+	channel cOut_reals = {div.value, K};/**/
+}
+interface K_1
+{
+	inbound Vx;
+	inbound xx;
+	inbound xt;
+	inbound tt;
+	inbound denominator;
+	
+	outbound k1;
+	
+	property boolean match_roger = false;
+	property int fraction_bits = 0;
+}
+binding jK_1 implements K_1
+{
+	implementation "K_1.java";
+}
+interface K_2
+{
+	inbound Vx;
+	inbound Vy;
+	inbound xy;
+	inbound yy;
+	inbound yt;
+	inbound denominator;
+	
+	outbound k2;
+	
+	property boolean match_roger = false;
+	property int fraction_bits = 0;
+}
+binding jK_2 implements K_2
+{
+	implementation "K_2.java";
+}
+
+interface Add
+{
+	inbound in_1;
+	inbound in_2;
+	
+	outbound out;
+}
+binding jAdd implements Add
+{
+	implementation "Add.java";
+}

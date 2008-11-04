@@ -1,0 +1,62 @@
+package outer_product;
+
+
+import astruct.pcie.Vio;
+import derivitive.Derivitive;
+import smooth_d.Smooth_d;
+import astruct.primitives.Sink;
+
+
+const int width = 316;
+const int height = 252;
+const boolean match_roger=true;
+
+interface RootTest{}
+design Outer_ProductTest1
+{
+	RootTest root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+
+}
+binding cRoot implements RootTest
+{
+	//Vio vio = {numSources=3, numSinks=3};
+	
+	Vio vio = {numSources=1, numSinks=3};
+	Derivitive dx_dy_dt = {width=width, height=height, match_roger = match_roger};
+	Smooth_d smooth_dx = {width=width-4, height=height-4, controller_port=0, match_roger = match_roger};
+	Smooth_d smooth_dy = {width=width-4, height=height-4, controller_port=1, match_roger = match_roger};
+	Smooth_d smooth_dt = {width=width-4, height=height-4, controller_port=2, match_roger = match_roger};
+	//Sink g_xx;
+	//Sink g_xy;
+	//Sink g_xt;
+	Sink g_yy;
+	Sink g_yt;
+	Sink g_tt;
+	Outer_Product op = {match_roger = match_roger};
+	
+	//just lost edge pixels w-4
+	channel c0 = {vio.out[0],dx_dy_dt.in};
+	channel c1 = {dx_dy_dt.dx_out, smooth_dx.in};
+	attribute MinimumBuffer(2*(width-4)) on smooth_dx.in;
+	channel c2 = {dx_dy_dt.dy_out, smooth_dy.in};
+	channel c3 = {dx_dy_dt.dt_out, smooth_dt.in};
+	
+	channel cx1 = {smooth_dx.out, op.dx_smooth};// vio.in[0]};
+	channel cy1 = {smooth_dy.out, op.dy_smooth};// vio.in[1]};
+	channel ct1 = {smooth_dt.out, op.dt_smooth};// vio.in[2]};
+	attribute MinimumBuffer((width-8)) on smooth_dx.out;
+	attribute MinimumBuffer((width-8)) on smooth_dy.out;
+	attribute MinimumBuffer((width-8)) on smooth_dt.out;
+
+	channel c_xx = {op.g_xx, vio.in[0]};
+	channel c_xy = {op.g_xy, vio.in[1]};//g_xy.in};
+	channel c_xt = {op.g_xt, vio.in[2]};// g_xt.in};
+	channel c_yy = {op.g_yy, g_yy.in};
+	channel c_yt = {op.g_yt, g_yt.in};
+	channel c_tt = {op.g_tt, g_tt.in};
+}

@@ -1,0 +1,22 @@
+package utility;
+
+import astruct.pcie.Vio;
+
+interface Root{}
+design Shift_test
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=1, numSinks=1};
+	Shift sam = {shift_by = 4};
+	
+	channel c0 = {vio.out[0], sam.in};
+	channel c1 = {sam.out, vio.in[0]};
+}

@@ -1,0 +1,28 @@
+package smooth_v;
+
+import astruct.pcie.Vio;
+
+const int width = 316;
+const int height = 252;
+
+interface Root{}
+
+design Smooth_VTest
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=1, numSinks=1};
+	
+	Smooth_V smooth_v_x={width=width-10, height=height-10};
+
+	channel c0 = {vio.out[0],smooth_v_x.V};
+	channel c1 = {smooth_v_x.V_smooth, vio.in[0]};
+
+}

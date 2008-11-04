@@ -1,0 +1,27 @@
+package smooth_d;
+import astruct.pcie.Vio;
+
+const int width = 316;
+const int height = 252;
+
+interface RootTest{}
+
+design Smooth_d_test
+{
+	RootTest root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements RootTest
+{
+	Vio vio = {numSources=1, numSinks=1};
+	Conv_y conv_y = {width=width-8, height=height-4};
+	//lost 4 x-pixels from dx another 4 x-pixels from Convx
+	//losth 4 y-pixels from dy
+	
+	channel c0 = {vio.out[0], conv_y.in};
+	channel c1 = {conv_y.out, vio.in[0]};
+}

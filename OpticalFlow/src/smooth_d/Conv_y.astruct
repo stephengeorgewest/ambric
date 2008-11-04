@@ -1,0 +1,44 @@
+package smooth_d;
+
+interface Conv_y
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding aConv_y implements Conv_y
+{
+	Conv_y_kernel conv_y={width=width,height=height};
+	channel c2={in, conv_y.in};
+		channel c2_3={conv_y.fifo_3_in, conv_y.fifo_3_out};
+			attribute MinimumBuffer(width) on conv_y.fifo_3_in;
+		channel c2_2={conv_y.fifo_2_in, conv_y.fifo_2_out};
+			attribute MinimumBuffer(width) on conv_y.fifo_2_in;
+		channel c2_1={conv_y.fifo_1_in, conv_y.fifo_1_out};
+			attribute MinimumBuffer(width) on conv_y.fifo_1_in;
+		channel c2_0={conv_y.fifo_0_in, conv_y.fifo_0_out};
+			attribute MinimumBuffer(width) on conv_y.fifo_0_in;
+	channel c3={conv_y.out,out};
+}
+interface Conv_y_kernel
+{
+	inbound in;
+	outbound fifo_3_in;
+	inbound fifo_3_out;
+	outbound fifo_2_in;
+	inbound fifo_2_out;
+	outbound fifo_1_in;
+	inbound fifo_1_out;
+	outbound fifo_0_in;
+	inbound fifo_0_out;
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding jConv_y implements Conv_y_kernel
+{
+	implementation "Conv_y.java";
+}

@@ -1,0 +1,33 @@
+package derivitive;
+
+import astruct.pcie.Vio;
+
+
+const int width = 316;
+const int height = 252;
+const boolean match_roger = true;
+
+interface RootTest{}
+
+design DerivitiveTest
+{
+	RootTest root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements RootTest
+{
+	Vio vio = {numSources=1, numSinks=3};
+
+	Derivitive d = {width=width, height=height, match_roger=match_roger};
+
+	channel c0 = {vio.out[0],d.in};
+
+	channel ca = {d.dx_out, vio.in[0]};
+	channel cb = {d.dy_out, vio.in[1]};
+	channel cc = {d.dt_out, vio.in[2]};
+
+}

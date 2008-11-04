@@ -1,0 +1,47 @@
+package smooth_d;
+
+import utility.Shift_Saturate;
+
+interface Smooth_d
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+	property int controller_port;
+	property boolean match_roger = false;
+}
+binding aSmooth_d implements Smooth_d
+{
+	Conv_t smooth_t={width=width,height=height, controller_port=controller_port, offset=width*height*4*3*controller_port};
+	Conv_x conv_x={width=width};
+	//conv_x drops l/r edge pixels
+	Conv_y conv_y={width=width-4, height=height};
+	// conv_y drops the top/bottom pixels
+	channel c0={in, smooth_t.in};
+	void generate()
+	{
+		if(match_roger)
+		{
+			Shift_Saturate sst = {shift_by = 0, max = 255, min = -256};//roger's kernel is [2 4 2] then divides by two... I do [1 2 1]
+			Shift_Saturate ssx = {shift_by = 2, max = 1023, min = -1024};
+			Shift_Saturate ssy = {shift_by = 2, max = 8191, min = -8192};
+			
+			channel c1={smooth_t.out, sst.in};
+			channel c1a = {sst.out, conv_x.in};
+			channel c2={conv_x.out, ssx.in};
+			channel c2a = {ssx.out, conv_y.in};
+			channel c3={conv_y.out, ssy.in};
+			channel c3a = {ssy.out, out};
+		}
+		else
+		{
+			channel c1={smooth_t.out, conv_x.in};
+			channel c2={conv_x.out, conv_y.in};
+			channel c3={conv_y.out, out};
+		}
+	}
+	
+
+}

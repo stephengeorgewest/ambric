@@ -1,0 +1,14 @@
+package utility;
+
+interface Shift
+{
+	inbound in;
+	outbound out;
+	
+	property int shift_by;
+}
+binding jShift implements Shift
+{
+	implementation "Shift.java";
+	attribute CompilerOptions (targetSR=true) on jShift;
+}

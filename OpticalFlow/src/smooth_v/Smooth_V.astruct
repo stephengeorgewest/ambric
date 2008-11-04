@@ -1,0 +1,131 @@
+package smooth_v;
+
+import utility.Saturate;
+
+interface Smooth_V
+{
+	inbound V;
+	
+	outbound V_smooth;
+	
+	property int width;
+	property int height;
+}
+binding aSmooth_V implements Smooth_V
+{
+	//Saturate sat = {max = 7, min =-8};
+	Conv_x_1_1_1_2_1_1_1 conv_x_V={width=width};
+	Conv_y_1_1_1_2_1_1_1_w_fifos conv_y_V={width=width-6, height=height};
+	
+	channel c0 = {V, conv_x_V.in};
+	//channel c0 = {V, sat.in};
+	//channel c1 = {sat.out, conv_x_V.in};
+	//channel c2 = {conv_x_V.out, V_smooth};
+	//channel c1 = {sat.out, conv_y_V.in};
+	channel c2 = {conv_x_V.out, conv_y_V.in};
+	channel c3 = {conv_y_V.out, V_smooth};
+	
+}
+
+interface Conv_x_1_1_1_2_1_1_1
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+}
+binding jConv_x_1_1_1_2_1_1_1 implements Conv_x_1_1_1_2_1_1_1
+{
+	implementation "Conv_x_1_1_1_2_1_1_1.java";
+}
+
+interface Conv_y_1_1_1_2_1_1_1_w_fifos
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding aConv_y_1_1_1_2_1_1_1_w_fifos implements Conv_y_1_1_1_2_1_1_1_w_fifos
+{
+	Conv_y_1_1_1_2_1_1_1 conv_y={width=width,height=height};
+	Lower_3_Fifos lower={width=width,height=height};
+	Upper_3_Fifos upper={width=width,height=height};
+	
+	channel c0={in,conv_y.in};
+	channel c1={conv_y.bottom_3_fifos_in, lower.in};
+		channel c11={lower.Bottom_in,lower.Bottom_out};
+			attribute MinimumBuffer(width) on lower.Bottom_in;
+		channel c12={lower.Middle_in,lower.Middle_out};
+			attribute MinimumBuffer(width) on lower.Middle_in;
+		channel c13={lower.Top_in,lower.Top_out};
+			attribute MinimumBuffer(width) on lower.Top_in;
+		channel c14={lower.top_3_fifos_in,upper.in};
+		
+	channel c15={lower.out, conv_y.bottom_3_fifos_out};
+		channel c16={upper.Bottom_in,upper.Bottom_out};
+			attribute MinimumBuffer(width) on upper.Bottom_in;
+		channel c17={upper.Middle_in,upper.Middle_out};
+			attribute MinimumBuffer(width) on upper.Middle_in;
+		channel c18={upper.Top_in,upper.Top_out};
+			attribute MinimumBuffer(width) on upper.Top_in;
+			
+	channel c2={upper.out, conv_y.top_3_fifos_out};
+	
+	channel c3={conv_y.out,out};
+		
+}
+interface Conv_y_1_1_1_2_1_1_1
+{
+	inbound in;
+	inbound bottom_3_fifos_out;
+	inbound top_3_fifos_out; 
+	outbound bottom_3_fifos_in; 
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding jConv_y_1_1_1_2_1_1_1 implements Conv_y_1_1_1_2_1_1_1
+{
+	implementation "Conv_y_1_1_1_2_1_1_1.java";
+}
+interface Lower_3_Fifos
+{
+	inbound in;
+	outbound Top_in; 
+	inbound Top_out;
+	outbound Middle_in; 
+	inbound Middle_out;
+	outbound Bottom_in; 
+	inbound Bottom_out;
+	outbound out;
+	outbound top_3_fifos_in;
+	
+	property int width;
+	property int height;
+}
+binding jLower_3_Fifos implements Lower_3_Fifos
+{
+	implementation "Lower_3_Fifos.java";
+}
+
+interface Upper_3_Fifos
+{
+	inbound in;
+	outbound Top_in;
+	inbound Top_out;
+	outbound Middle_in;
+	inbound Middle_out;
+	outbound Bottom_in;
+	inbound Bottom_out;
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding jUpper_3_Fifos implements Upper_3_Fifos
+{
+	implementation "Upper_3_Fifos.java";
+}	

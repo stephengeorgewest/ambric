@@ -1,0 +1,35 @@
+package derivitive;
+
+import astruct.pcie.Vio;
+
+const int width = 16;//316;
+const int height = 16;//252;
+
+interface RootTest{}
+
+design D_splitTest
+{
+	RootTest root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements RootTest
+{
+	Vio vio = {numSources=0, numSinks=3};
+	
+	source_x_y_t source = {width=width, height=height};
+
+	D_split split = {width=width, height=height};
+
+	channel c0 = {source.out, split.in};
+	channel c1 = {split.dx, vio.in[0]};
+	channel c2 = {split.dy, vio.in[1]};
+	channel c3 = {split.dt, vio.in[2]};
+	/*attribute PortTap("split_dx_out.ambricFile") on dx.in;
+	attribute PortTap("split_dy_out.ambricFile") on dy.in;
+	attribute PortTap("split_dt_out.ambricFile") on dt.in;*/
+}
+

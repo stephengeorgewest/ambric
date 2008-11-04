@@ -1,0 +1,13 @@
+package outer_product;
+
+interface Test_input
+{
+	outbound x;
+	outbound y;
+	outbound t;
+}
+
+binding jTest_input implements Test_input
+{
+	implementation "Test_input.java";
+}

@@ -1,0 +1,14 @@
+package smooth_d;
+
+
+interface Conv_x
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+}
+binding jConv_x implements Conv_x
+{
+	implementation "Conv_x.java";
+}

@@ -1,0 +1,23 @@
+package utility;
+
+interface Shift_Saturate
+{
+	inbound in;
+	outbound out;
+	
+	property int shift_by;
+	property int max;
+	property int min;
+}
+binding aShift_Saturate implements Shift_Saturate
+{
+	Shift shift = {shift_by=shift_by};
+	Saturate saturate = {max=max, min=min};
+	
+	//attribute CompilerOptions (targetSR=true) on shift;
+	//attribute CompilerOptions (targetSR=true) on saturate;
+
+	channel a = {in, shift.in};
+	channel b = {shift.out, saturate.in};
+	channel c = {saturate.out, out};
+}

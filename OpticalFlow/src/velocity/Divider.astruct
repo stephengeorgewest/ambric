@@ -1,0 +1,15 @@
+package velocity;
+
+interface Divider
+{
+	inbound numerator;
+	inbound denominator;
+	outbound value;
+	
+	property int fraction_bits = 0;
+	property int max_int;
+}
+binding jDivider implements Divider
+{
+	implementation "Divider.java";
+}

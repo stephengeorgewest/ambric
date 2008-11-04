@@ -1,0 +1,80 @@
+package smooth_op;
+
+import astruct.pcie.Vio;
+
+import derivitive.Derivitive;
+import smooth_d.Smooth_d;
+import outer_product.Outer_Product;
+import smooth_op.Smooth_OP;
+
+import astruct.primitives.Sink;
+
+//import astruct.debug_master.DebugMaster;
+//import astruct.pcie.Vio;
+
+const int width = 316;
+const int height = 252;
+
+interface Root{}
+
+design Smooth_OP2
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=1, numSinks=3};
+	
+	Derivitive dx_dy_dt = {width=width, height=height};
+	//just lost edge pixels w-4
+	Smooth_d smooth_t_dx = {width=width-4, height=height-4, controller_port=0};
+	Smooth_d smooth_t_dy = {width=width-4, height=height-4, controller_port=1};
+	Smooth_d smooth_t_dt = {width=width-4, height=height-4, controller_port=2};
+	//lost some more edge pixels width-8
+	Outer_Product outer_product;
+	Smooth_OP smooth_op_g_xx={width=width-8, height=height-8};
+	Smooth_OP smooth_op_g_xy={width=width-8, height=height-8};
+	Smooth_OP smooth_op_g_xt={width=width-8, height=height-8};
+	Smooth_OP smooth_op_g_yy={width=width-8, height=height-8};
+	Smooth_OP smooth_op_g_yt={width=width-8, height=height-8};
+	Smooth_OP smooth_op_g_tt={width=width-8, height=height-8};
+	Sink g_xx_smooth;
+	Sink g_xy_smooth;
+	Sink g_xt_smooth;
+	//Sink g_yy_smooth;
+	//Sink g_yt_smooth;
+	//Sink g_tt_smooth;
+	//lost some more now width-10,height-10
+	//Velocity velocity;
+	//Smooth_V smooth_v_x={width=width-10, height=height-10};
+	//Smooth_V smooth_v_y={width=width-10, height=height-10};
+	
+	channel c0 = {vio.out[0],dx_dy_dt.in};
+	channel c1 = {dx_dy_dt.dx_out, smooth_t_dx.in};
+	channel c2 = {dx_dy_dt.dy_out, smooth_t_dy.in};
+	channel c3 = {dx_dy_dt.dt_out, smooth_t_dt.in};
+	channel c4 = {smooth_t_dx.out, outer_product.dx_smooth};
+	channel c5 = {smooth_t_dy.out, outer_product.dy_smooth};
+	channel c6 = {smooth_t_dt.out, outer_product.dt_smooth};
+	
+	channel c7 = {outer_product.g_xx, smooth_op_g_xx.in};
+	channel c8 = {outer_product.g_xy, smooth_op_g_xy.in};
+	channel c9 = {outer_product.g_xt, smooth_op_g_xt.in};
+	channel c10 = {outer_product.g_yy, smooth_op_g_yy.in};
+	channel c11 = {outer_product.g_yt, smooth_op_g_yt.in};
+	channel c12 = {outer_product.g_tt, smooth_op_g_tt.in};
+	
+	channel c13 = {smooth_op_g_xx.out, g_xx_smooth.in};
+	channel c14 = {smooth_op_g_xy.out, g_xy_smooth.in};
+	channel c15 = {smooth_op_g_xt.out, g_xt_smooth.in};
+	channel c16 = {smooth_op_g_yy.out, vio.in[0]};// g_yt_smooth.in};
+	channel c17 = {smooth_op_g_yt.out, vio.in[1]};// g_yy_smooth.in};
+	channel c18 = {smooth_op_g_tt.out, vio.in[2]};// g_tt_smooth.in};
+	
+
+}

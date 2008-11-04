@@ -1,0 +1,46 @@
+package derivitive;
+
+
+interface Dy_
+{
+	inbound in;
+	inbound bottom_8_fifo_out;
+	inbound top_8_fifo_out;
+	inbound top_1_fifo_out;
+	outbound bottom_8_fifo_in;
+	outbound top_8_fifo_in;
+	outbound top_1_fifo_in;
+	 
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding jDy implements Dy_
+{
+	implementation "Dy.java";
+}
+
+interface Dy
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+}
+binding aDy_w_fifos implements Dy
+{
+
+ 	Dy_ dy = {width=width, height=height};
+	channel c0 = {in, dy.in};
+	channel cy1_fifo_bottom_8 = {dy.bottom_8_fifo_in, dy.bottom_8_fifo_out};
+		attribute MinimumBuffer(width) on dy.bottom_8_fifo_in;
+	channel cy2_fifo_top_8 = {dy.top_8_fifo_in, dy.top_8_fifo_out};
+		attribute MinimumBuffer(2*width) on dy.top_8_fifo_in;
+		//middle fifo holds 2 rows
+	channel cy3_fifo_top_1 = {dy.top_1_fifo_in, dy.top_1_fifo_out};
+		attribute MinimumBuffer(width) on dy.top_1_fifo_in;
+	channel cy4 = {dy.out, out};
+
+}

@@ -1,0 +1,13 @@
+package derivitive;
+
+interface Dx
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+}
+binding jDx implements Dx
+{
+	implementation "Dx.java";
+}

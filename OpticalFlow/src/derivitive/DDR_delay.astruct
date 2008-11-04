@@ -1,0 +1,37 @@
+package derivitive;
+
+import astruct.io.DDR2;
+
+interface DDR_delay
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+	property int offset;
+	property int port;
+}
+binding aDt_w_fifos implements DDR_delay
+{
+	DDR2 ddr = {controller=0, port = port, size=width*height*4*4};//w*h*4*5
+	DDR_ control ={width=width, height=height, offset = offset};
+	//Dt_ dt;
+	
+	channel c0 = {in, control.in};
+	channel c1 = {control.out, ddr.in};
+	channel c2 = {ddr.out, out};
+}
+interface DDR_
+{
+	inbound in;
+	outbound out;
+	
+	property int width;
+	property int height;
+	property int offset;
+}
+binding jDDR_ implements DDR_
+{
+	implementation "DDR_Control_delay.java";
+}

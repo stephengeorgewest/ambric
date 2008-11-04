@@ -1,0 +1,112 @@
+package velocity;
+
+import astruct.primitives.Source;
+import astruct.primitives.Sink;
+import astruct.primitives.DupFork;
+import utility.Shift;
+import utility.Dup3;
+import utility.Shift_Saturate;
+
+const int shift_by = 16;
+
+const int fraction_bits =4;//3;
+
+interface Velocity_upto_K
+{
+	inbound g_xx_smooth;
+	inbound g_xy_smooth;
+	inbound g_xt_smooth;
+	inbound g_yt_smooth;
+	inbound g_yy_smooth;
+	inbound g_tt_smooth;
+	
+	outbound K;
+	
+	property boolean match_roger = false;
+}
+binding aVelocity implements Velocity_upto_K
+{
+	void generate()
+	{
+		
+		DupFork xx_split;
+		DupFork xy_split;
+		DupFork xt_split;
+		DupFork yy_split;
+		DupFork yt_split;
+		
+		Source k0 ={ initialValue = 0, incrementValue = 0 };
+		V v1 = {fraction_bits = fraction_bits};
+		
+		K_calc k1 = {fraction_bits = fraction_bits};
+		//V v2 = {fraction_bits = fraction_bits};
+		//Sink den1;
+		if(match_roger)
+		{
+			
+			channel c0 = {g_xx_smooth, xx_split.in};
+			channel c1 = {g_xy_smooth, xy_split.in};
+			channel c2 = {g_xt_smooth, xt_split.in};
+			channel c3 = {g_yy_smooth, yy_split.in};
+			channel c4 = {g_yt_smooth, yt_split.in};
+		}
+		else
+		{
+			/*
+			channel c0 = {g_xx_smooth, xx_split.in};
+			channel c1 = {g_xy_smooth, xy_split.in};
+			channel c2 = {g_xt_smooth, xt_split.in};
+			channel c3 = {g_yy_smooth, yy_split.in};
+			channel c4 = {g_yt_smooth, yt_split.in};
+			/**/
+	
+		
+			Shift shiftxx = {shift_by=shift_by};
+			Shift shiftxy = {shift_by=shift_by};
+			Shift shiftxt = {shift_by=shift_by};
+			Shift shiftyy = {shift_by=shift_by};
+			Shift shiftyt = {shift_by=shift_by};
+			
+			
+			channel c00 = {g_xx_smooth, shiftxx.in};
+			channel c01 = {shiftxx.out, xx_split.in};
+			channel c10 = {g_xy_smooth, shiftxy.in};
+			channel c11 = {shiftxy.out,  xy_split.in};
+			channel c20 = {g_xt_smooth, shiftxt.in};
+			channel c21 = {shiftxt.out,  xt_split.in};
+			channel c30 = {g_yy_smooth, shiftyy.in};
+			channel c31 = {shiftyy.out,  yy_split.in};
+			channel c40 = {g_yt_smooth, shiftyt.in};
+			channel c41 = {shiftyt.out,  yt_split.in};
+		
+		}
+		channel cv11 = {k0.out, v1.k};
+		channel cv12 = {xx_split.left, v1.xx};
+		channel cv13 = {xy_split.left, v1.xy};
+		channel cv14 = {xt_split.left, v1.xt};
+		channel cv15 = {yy_split.left, v1.yy};
+		channel cv16 = {yt_split.left, v1.yt};
+		
+		channel ck10 = {v1.Vx, k1.Vx};
+		channel ck11 = {v1.Vy, k1.Vy};
+		channel ck122 = {v1.denominator, k1.denominator};
+		channel ck12 = {xx_split.right, k1.xx};
+		channel ck13 = {xy_split.right, k1.xy};
+		channel ck14 = {xt_split.right, k1.xt};
+		channel ck15 = {yy_split.right, k1.yy};
+		channel ck16 = {yt_split.right, k1.yt};
+	
+		if(match_roger)
+		{
+			channel ck17 = {g_tt_smooth,   k1.tt};
+		}
+		else
+		{
+			Shift shifttt = {shift_by=shift_by};
+			channel ck17 = {g_tt_smooth, shifttt.in};
+			channel ck171 = {shifttt.out, k1.tt};
+		}
+		
+		channel cv21 = {k1.K, K};
+	}
+}

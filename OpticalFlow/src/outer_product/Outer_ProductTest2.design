@@ -1,0 +1,47 @@
+package outer_product;
+
+
+import astruct.pcie.Vio;
+import astruct.primitives.Sink;
+
+
+const int width = 316;
+const int height = 252;
+
+interface RootTest{}
+design Outer_ProductTest1
+{
+	RootTest root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+
+}
+binding cRoot implements RootTest
+{
+	Vio vio = {numSources=3, numSinks=3};
+
+	Sink g_xx;
+	Sink g_xy;
+	Sink g_xt;
+	//Sink g_yy;
+	//Sink g_yt;
+	//Sink g_tt;
+	Outer_Product op;
+	
+
+	channel cdx = {vio.out[0],op.dx_smooth};
+	channel cdy = {vio.out[1],op.dy_smooth};
+	channel cdt = {vio.out[2],op.dt_smooth};
+
+		
+
+	channel c_xx = {op.g_xx, g_xx.in};
+	channel c_xy = {op.g_xy, g_xy.in};
+	channel c_xt = {op.g_xt, g_xt.in};
+	channel c_yy = {op.g_yy, vio.in[0]};// g_yy.in};
+	channel c_yt = {op.g_yt, vio.in[1]};// g_yt.in};
+	channel c_tt = {op.g_tt, vio.in[2]};// g_tt.in};
+}

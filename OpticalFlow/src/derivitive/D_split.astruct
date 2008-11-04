@@ -1,0 +1,17 @@
+package derivitive;
+
+
+interface D_split
+{
+	inbound in;
+	outbound dx;
+	outbound dy;
+	outbound dt;
+	
+	property int width;
+	property int height;
+}
+binding jD_split implements D_split
+{
+	implementation "D_split.java";
+}

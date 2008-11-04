@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="com.ambric.adesigner.launcher.design">
+<stringAttribute key="com.ambric.adesigner.launcher.ddrA" value=""/>
+<stringAttribute key="com.ambric.adesigner.launcher.ddrB" value=""/>
+<booleanAttribute key="com.ambric.adesigner.launcher.debugServer" value="false"/>
+<stringAttribute key="com.ambric.adesigner.launcher.design" value="src\velocity\VelocityTest.design"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.genHalt" value="false"/>
+<stringAttribute key="com.ambric.adesigner.launcher.host" value="localhost"/>
+<intAttribute key="com.ambric.adesigner.launcher.hwBoardId" value="0"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.hwExternal" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.hwHalt" value="false"/>
+<mapAttribute key="com.ambric.adesigner.launcher.iofiles">
+<mapEntry key="0,Stimulus" value="Output\Smooth_d\Smooth_d_dx_output308x244x7.ambricFile"/>
+<mapEntry key="1,Stimulus" value="Output\Smooth_d\Smooth_d_dy_output308x244x7.ambricFile"/>
+<mapEntry key="2,Stimulus" value="Output\Smooth_d\Smooth_d_dt_output308x244x7.ambricFile"/>
+<mapEntry key="0,Capture" value="Output\Velocity\Vx_306x242x7.ambricFile"/>
+<mapEntry key="1,Capture" value="Output\Velocity\Vy_306x242x7.ambricFile"/>
+</mapAttribute>
+<intAttribute key="com.ambric.adesigner.launcher.port" value="1697"/>
+<stringAttribute key="com.ambric.adesigner.launcher.profilingCapture" value=""/>
+<stringAttribute key="com.ambric.adesigner.launcher.project" value="Optical Flow"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.regressGen" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.regressHw" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.regressSim" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.simHalt" value="false"/>
+<intAttribute key="com.ambric.adesigner.launcher.simJavaIss" value="0"/>
+<intAttribute key="com.ambric.adesigner.launcher.type" value="2"/>
+</launchConfiguration>

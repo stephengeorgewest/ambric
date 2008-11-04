@@ -1,0 +1,63 @@
+package velocity;
+
+import astruct.pcie.Vio;
+
+import derivitive.Derivitive;
+import smooth_d.Smooth_d;
+import outer_product.Outer_Product;
+import smooth_op.Smooth_OP;
+
+const int width = 316;
+const int height = 252;
+const boolean match_roger = true;
+interface Root{}
+
+design VelocityTest
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=3, numSinks=2};
+	
+	//lost some more edge pixels width-8
+	Outer_Product outer_product = {match_roger = match_roger};
+	Smooth_OP smooth_op_g_xx={width=width-8, height=height-8, match_roger = match_roger};
+	Smooth_OP smooth_op_g_xy={width=width-8, height=height-8, match_roger = match_roger};
+	Smooth_OP smooth_op_g_xt={width=width-8, height=height-8, match_roger = match_roger};
+	Smooth_OP smooth_op_g_yy={width=width-8, height=height-8, match_roger = match_roger};
+	Smooth_OP smooth_op_g_yt={width=width-8, height=height-8, match_roger = match_roger};
+	Smooth_OP smooth_op_g_tt={width=width-8, height=height-8, match_roger = match_roger};
+
+	//lost some more now width-10,height-10
+	Velocity velocity = {match_roger = match_roger};
+	//Smooth_V smooth_v_x={width=width-10, height=height-10};
+	//Smooth_V smooth_v_y={width=width-10, height=height-10};
+	
+	channel c0 = {vio.out[0], outer_product.dx_smooth};
+	channel c5 = {vio.out[1], outer_product.dy_smooth};
+	channel c6 = {vio.out[2], outer_product.dt_smooth};
+	
+	channel c7 = {outer_product.g_xx, smooth_op_g_xx.in};
+	channel c8 = {outer_product.g_xy, smooth_op_g_xy.in};
+	channel c9 = {outer_product.g_xt, smooth_op_g_xt.in};
+	channel c10 = {outer_product.g_yy, smooth_op_g_yy.in};
+	channel c11 = {outer_product.g_yt, smooth_op_g_yt.in};
+	channel c12 = {outer_product.g_tt, smooth_op_g_tt.in};
+	
+	channel c13 = {smooth_op_g_xx.out, velocity.g_xx_smooth};
+	channel c14 = {smooth_op_g_xy.out, velocity.g_xy_smooth};
+	channel c15 = {smooth_op_g_xt.out, velocity.g_xt_smooth};
+	channel c16 = {smooth_op_g_yy.out, velocity.g_yy_smooth};
+	channel c17 = {smooth_op_g_yt.out, velocity.g_yt_smooth};
+	channel c18 = {smooth_op_g_tt.out, velocity.g_tt_smooth};
+	
+	channel c19 = {velocity.Vx, vio.in[0]};
+	channel c20 = {velocity.Vy, vio.in[1]};
+
+}
