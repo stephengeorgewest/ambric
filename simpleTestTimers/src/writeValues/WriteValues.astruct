@@ -1,0 +1,11 @@
+package writeValues;
+
+interface WriteValues
+{
+	//inbound in;
+	outbound out;
+}
+binding jWriteValues implements WriteValues
+{
+	implementation "WriteValues.java";
+}

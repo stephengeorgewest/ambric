@@ -1,0 +1,8 @@
+window values addr 5 on Root.values
+
+window sink addr 5 on Root.sink
+window join3 addr 5 on Root.join
+
+window shuffle addr 5 on Root.shuffle
+window fact addr 5 on Root.fact
+window add addr 5 on Root.add

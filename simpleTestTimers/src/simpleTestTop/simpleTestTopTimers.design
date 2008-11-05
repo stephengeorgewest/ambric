@@ -1,0 +1,65 @@
+package simpleTestTop;
+
+import astruct.pcie.Vio;
+import lotsOfMath.RunningSum;
+import lotsOfMath.Factorial;
+import shuffleValues.ShuffleValues;
+import writeValues.WriteValues;
+import stuff.Split;
+import stuff.Join3;
+
+import timers.Timer_Start;
+import timers.Timer_Stop;
+import astruct.profile.MultiTimer;
+
+
+import astruct.primitives.Sink;
+
+tag PerformanceAnalysisGroup {myTimerTest}
+interface Root{}
+design top
+{
+
+	Root Root;
+	options {
+		architecture = Architecture.AM2045,
+		image = Image.PCIE
+	} on Root;
+}
+binding cRoot implements Root
+{
+	Vio vio={numSources=0, numSinks=1};
+	Timer_Start timer_start;
+	Timer_Stop timer_stop;
+	Sink sink;
+	/*Sink sink2;
+	Sink sink3;*/
+	
+	WriteValues values2;
+	ShuffleValues shuffle;
+	RunningSum add;
+	Factorial fact;
+	Split split;
+	Join3 join;
+
+	WriteValues values;
+	channel c0 = {values.out, timer_start.in};
+	channel cc = {timer_start.out, split.in};
+		attribute Timer("timer") on timer_start;
+	channel ca0 = {split.out_1, add.in };/*add.in};*/
+	channel ca2 = {add.out, join.in_1};
+	
+	channel cb0 = {split.out_2, fact.in};
+	channel cb1 = {fact.out, join.in_2};
+	
+	channel cc0 = {values2.out,shuffle.in};
+	channel cc1 = {shuffle.out,  join.in_3};
+		attribute MinimumBuffer(25) on shuffle.out;
+	
+	channel c1 = {join.out, timer_stop.in};
+	channel c2 = {timer_stop.out, sink.in};
+		attribute Timer("timer") on timer_stop;
+	TimerDataRouter timerDataRouter;
+	channel routerToViohChannel = {timerDataRouter.out, vio.in[0]};
+	
+}

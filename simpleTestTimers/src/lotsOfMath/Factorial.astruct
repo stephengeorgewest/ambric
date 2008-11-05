@@ -1,0 +1,11 @@
+package lotsOfMath;
+
+interface Factorial
+{
+	inbound in;
+	outbound out;
+}
+binding jFactorial implements Factorial
+{
+	implementation "Factorial.java";
+}

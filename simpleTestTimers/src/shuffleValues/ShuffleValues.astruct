@@ -1,0 +1,11 @@
+package shuffleValues;
+
+interface ShuffleValues
+{
+	inbound in;
+	outbound out;
+}
+binding jShuffleValues implements ShuffleValues
+{
+	implementation "ShuffleValues.java";
+}

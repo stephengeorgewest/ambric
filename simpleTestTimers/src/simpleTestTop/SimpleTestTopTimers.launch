@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="com.ambric.adesigner.launcher.design">
+<stringAttribute key="com.ambric.adesigner.launcher.ddrA" value=""/>
+<stringAttribute key="com.ambric.adesigner.launcher.ddrB" value=""/>
+<booleanAttribute key="com.ambric.adesigner.launcher.debugServer" value="false"/>
+<stringAttribute key="com.ambric.adesigner.launcher.design" value="src/top/simpleTestTopTimers.design"/>
+<stringAttribute key="com.ambric.adesigner.launcher.host" value="localhost"/>
+<intAttribute key="com.ambric.adesigner.launcher.hwBoardId" value="0"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.hwExternal" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.hwHalt" value="false"/>
+<mapAttribute key="com.ambric.adesigner.launcher.iofiles">
+<mapEntry key="0,Stimulus" value="numbers.ambricFile"/>
+<mapEntry key="0,Capture" value="timerdata.txt"/>
+</mapAttribute>
+<intAttribute key="com.ambric.adesigner.launcher.port" value="1697"/>
+<stringAttribute key="com.ambric.adesigner.launcher.profilingCapture" value="timerdata.txt"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.profilingEnabled" value="true"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.profilingHw" value="false"/>
+<stringAttribute key="com.ambric.adesigner.launcher.profilingMeas" value="src\top\Top aSim"/>
+<stringAttribute key="com.ambric.adesigner.launcher.project" value="simpleTestTimers"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.regressGen" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.regressHw" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.regressSim" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.simHalt" value="true"/>
+<intAttribute key="com.ambric.adesigner.launcher.simJavaIss" value="0"/>
+<intAttribute key="com.ambric.adesigner.launcher.type" value="2"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="{0}"/>
+</launchConfiguration>

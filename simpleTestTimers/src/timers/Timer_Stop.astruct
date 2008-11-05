@@ -1,0 +1,11 @@
+package timers;
+
+interface Timer_Stop
+{
+	inbound in;
+	outbound out;
+}
+binding jTimer_Stop implements Timer_Stop
+{
+	implementation "Timer_Stop.java";
+}

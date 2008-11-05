@@ -1,0 +1,11 @@
+package lotsOfMath;
+
+interface RunningSum
+{
+	inbound in;
+	outbound out;
+}
+binding jRunningSum implements RunningSum
+{
+	implementation "RunningSum.java";
+}

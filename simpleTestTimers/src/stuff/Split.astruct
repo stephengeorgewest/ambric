@@ -1,0 +1,12 @@
+package stuff;
+
+interface Split
+{
+	inbound in;
+	outbound out_1;
+	outbound out_2;
+}
+binding jSplit implements Split
+{
+	implementation "Split.java";
+}

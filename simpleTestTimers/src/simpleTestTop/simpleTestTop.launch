@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="com.ambric.adesigner.launcher.design">
+<stringAttribute key="com.ambric.adesigner.launcher.design" value="src\simpleTestTop\simpleTestTop.design"/>
+<stringAttribute key="com.ambric.adesigner.launcher.project" value="simpleTestTimers"/>
+<intAttribute key="com.ambric.adesigner.launcher.type" value="0"/>
+</launchConfiguration>

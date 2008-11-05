@@ -1,0 +1,11 @@
+package timers;
+
+interface Timer_Start
+{
+	inbound in;
+	outbound out;
+}
+binding jTimer_Start implements Timer_Start
+{
+	implementation "Timer_Start.java";
+}
