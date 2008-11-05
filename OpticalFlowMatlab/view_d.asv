@@ -1,0 +1,8 @@
+%function [] = view_d()
+
+load '\\Ambric\stephen''s documents\workspace\Optical Flow\Output\Derivitive\Dx_output312x248x10.tab_delimited'
+view_tab_del(Smooth_d_dx_output308x244x7);
+load '\\Ambric\stephen''s documents\workspace\Optical Flow\Output\Derivitive\Dy_output312x248x10.tab_delimited'
+view_tab_del(Smooth_d_dy_output308x244x7);
+load '\\Ambric\stephen''s documents\workspace\Optical Flow\Output\Der
+view_tab_del(Smooth_d_dt_output308x244x7);
