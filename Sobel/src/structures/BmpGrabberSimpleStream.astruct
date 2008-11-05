@@ -1,0 +1,11 @@
+package structures;
+
+interface BmpGrabberSimpleStream
+{
+	inbound in;
+	outbound out;
+}
+binding jBmpGrabber implements BmpGrabberSimpleStream
+{
+	implementation "BmpGrabberSimpleStream.java";
+}

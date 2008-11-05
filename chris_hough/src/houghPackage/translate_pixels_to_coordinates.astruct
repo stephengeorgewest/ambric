@@ -1,0 +1,10 @@
+package houghPackage;
+
+interface translate_pixels_to_coordinates {
+	inbound in;
+	outbound out;
+}
+
+binding Javatranslate_pixels_to_coordinates implements translate_pixels_to_coordinates {
+	implementation "translate_pixels_to_coordinates.java";
+}

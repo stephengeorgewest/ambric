@@ -1,0 +1,23 @@
+package houghPackage;
+
+interface Hough_processor {
+	property int start_bin; // My starting theta value 
+	property int col_size; // How deep to make accumulator
+	property int bin_count; // How many theta's am I resposible for?
+	property int cosine_val_0;  // My cosine values (fixed point)
+	property int sine_val_0; // My sine values (fixed point)
+	property int cosine_val_1;  // My cosine values (fixed point)
+	property int sine_val_1; // My sine values (fixed point)
+	property int cosine_val_2;  // My cosine values (fixed point)
+	property int sine_val_2; // My sine values (fixed point)
+	property int cosine_val_3;  // My cosine values (fixed point)
+	property int sine_val_3; // My sine values (fixed point)
+	property int max_r; // Maximum rho value
+	property int bp; // Binary Point
+	inbound in;
+	outbound out;
+}
+
+binding JavaHough_processor implements Hough_processor {
+	implementation "Hough_processor.java";
+}

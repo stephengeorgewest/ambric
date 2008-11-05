@@ -1,0 +1,155 @@
+package designs;
+import astruct.primitives.Sink;
+import source.PixelGrabberFifoStream;
+import source.Sobel;
+import source.Hough;
+import source.Image2coord;
+import source.Pack;
+import source.ImageArray;
+
+import astruct.debug_master.DebugMaster;
+
+const int width=64;//64;
+const int height=64;//64;
+const int radius_bins=128;
+const int total_angle_bins=64;
+const int num_processors=32;
+
+const int trig_log2_range = 15; // trig_range = 32768
+const int sineInitValues[] = {
+		0, 1607, 
+		3211, 4808, 
+		6392, 7961, 
+		9512, 11039, 
+		12539, 14010, 
+		15446, 16846, 
+		18204, 19519, 
+		20787, 22005, 
+		23170, 24279, 
+		25330, 26319, 
+		27245, 28106, 
+		28898, 29621, 
+		30273, 30852, 
+		31357, 31785, 
+		32138, 32413, 
+		32610, 32728, 
+		32768, 32728, 
+		32610, 32413, 
+		32138, 31785, 
+		31357, 30852, 
+		30273, 29621, 
+		28898, 28106, 
+		27245, 26319, 
+		25330, 24279, 
+		23170, 22005, 
+		20787, 19519, 
+		18204, 16846, 
+		15446, 14010, 
+		12539, 11039, 
+		9512, 7961, 
+		6392, 4808, 
+		3211, 1607
+		};
+const int cosineInitValues[] = {
+		32768, 32728, 
+		32610, 32413, 
+		32138, 31785, 
+		31357, 30852, 
+		30273, 29621, 
+		28898, 28106, 
+		27245, 26319, 
+		25330, 24279, 
+		23170, 22005, 
+		20787, 19519, 
+		18204, 16846, 
+		15446, 14010, 
+		12539, 11039, 
+		9512, 7961, 
+		6392, 4808, 
+		3211, 1607, 
+		0, -1607, 
+		-3211, -4808, 
+		-6392, -7961, 
+		-9512, -11039, 
+		-12539, -14010, 
+		-15446, -16846, 
+		-18204, -19519, 
+		-20787, -22005, 
+		-23170, -24279, 
+		-25330, -26319, 
+		-27245, -28106, 
+		-28898, -29621, 
+		-30273, -30852, 
+		-31357, -31785, 
+		-32138, -32413, 
+		-32610, -32728
+		};
+
+interface Root{}
+design Top
+{
+	Root Root;
+	options {
+		image=Image.UPI,
+		board=Board.IDB
+	} on Root;
+}
+binding CRoot implements Root
+{
+	DebugMaster dm={transport=IOTransport.USB};
+
+	PixelGrabberFifoStream img_in = {width=width, height=height};
+	void generate()
+	{
+		int i;
+		boolean pack_em=false;
+		Sink sink;
+		
+		ImageArray img_src;
+		//Unpack uPack;
+		//IOCount ioCount;
+		Sobel sobel;
+		Image2coord img2coord = {image_width=width, image_height=height};
+		img2coord.name="img2coord";
+		Hough processors[num_processors];
+		
+		for(i=0;i<num_processors;i++)
+		{
+			processors[i].name="processors_"+i;
+			processors[i].image_width=width;
+			processors[i].image_height=height;
+			processors[i].radius_bins=radius_bins;
+			processors[i].angle_bins=total_angle_bins;
+			processors[i].num_processors=num_processors;
+			processors[i].this_processor=i;
+			processors[i].trig_log2_range=trig_log2_range;
+			processors[i].cos0 = cosineInitValues[i*2];
+			processors[i].cos1 = cosineInitValues[i*2+1];
+			processors[i].sin0 = sineInitValues[i*2];
+			processors[i].sin1 = sineInitValues[i*2+1];
+		}
+		//channel ca={img_src.out,ioCount.in};
+		//channel cb={ioCount.out,img_in.in};
+		//channel c0 = {InOut.out[0],img_src.in};
+		channel c0= {img_src.out,img_in.in};
+		channel cFifoTop = {img_in.FifoTop_in,img_in.FifoTop_out};
+		channel cFifoMiddle = {img_in.FifoMiddle_in,img_in.FifoMiddle_out};
+		channel c1 = {img_in.out, sobel.in};
+		channel c2 = {sobel.out, img2coord.in};
+		channel c3 = {img2coord.out, processors[0].in};
+		for(i=1;i<num_processors;i++)
+		{
+			channel c = {processors[i-1].out, processors[i].in};
+		}
+		if(pack_em)
+		{
+			Pack pack1;
+			channel cn_1 = {processors[num_processors-1].out, pack1.in};
+			channel cn = {pack1.out, sink.in};
+		}
+		else
+		{
+			channel cn = {processors[num_processors-1].out, sink.in};
+		}
+	}
+}

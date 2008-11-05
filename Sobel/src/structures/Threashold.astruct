@@ -1,0 +1,11 @@
+package structures;
+
+interface Threashold
+{
+	inbound in;
+	outbound out;
+}
+binding jThreashold implements Threashold
+{
+	implementation "Threashold.java";	
+}

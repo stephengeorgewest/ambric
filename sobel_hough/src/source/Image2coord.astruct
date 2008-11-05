@@ -1,0 +1,13 @@
+package source;
+
+interface Image2coord
+{
+	inbound in;
+	outbound out;
+	property int image_width;
+	property int image_height;
+}
+binding jImage2coord implements Image2coord
+{
+	implementation "Image2coord.java";
+}

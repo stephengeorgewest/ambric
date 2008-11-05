@@ -1,0 +1,22 @@
+package designs;
+
+import astruct.pcie.Vio;
+import imageProcess.Threashold;
+import imageProcess.BmpSaver;
+
+interface Root{}
+design Top
+{
+	Root Root;
+}
+binding CRoot implements Root
+{
+	Vio InOut = { numSources=1, numSinks = 1};
+	Threashold threashold;
+	BmpSaver imageOut;
+
+	channel c0 = {InOut.out[0],threashold.in};
+	channel c10= {threashold.out,imageOut.in};
+	attribute PortTap ("data_out.file") on imageOut.out;
+	channel c11 = {imageOut.out, InOut.in[0]};
+}

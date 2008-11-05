@@ -1,0 +1,2 @@
+window Fifo addr 5 on Root.imageIn 
+window Sobel addr 5 on Root.sobel

@@ -1,0 +1,11 @@
+package structures;
+
+interface BmpSaverTwoStreams
+{
+	inbound in_1,in_2;
+	outbound out;
+}
+binding jBmpSaver implements BmpSaverTwoStreams
+{
+	implementation "BmpSaverTwoStreams.java";	
+}

@@ -1,0 +1,11 @@
+package structures;
+
+interface BmpSaver
+{
+	inbound in;
+	outbound out;
+}
+binding jBmpSaver implements BmpSaver
+{
+	implementation "BmpSaver.java";	
+}

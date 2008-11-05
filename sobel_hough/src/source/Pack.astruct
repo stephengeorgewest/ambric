@@ -1,0 +1,11 @@
+package source;
+
+interface Pack
+{
+	inbound in;
+	outbound out;
+}
+binding jPack implements Pack
+{
+	implementation "Pack.java";	
+}

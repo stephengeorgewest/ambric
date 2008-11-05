@@ -1,0 +1,23 @@
+package source;
+
+interface Hough
+{
+	inbound in;
+	outbound out;
+	property int image_width;
+	property int image_height;
+	
+	property int radius_bins;
+	property int angle_bins;
+	property int trig_log2_range;
+	
+	property int num_processors;
+	property int this_processor;
+
+	property int cos0;property int cos1;// property int cos2; property  int cos3;
+	property int sin0;property int sin1;// property int sin2; property int sin3;
+}
+binding jHough implements Hough
+{
+	implementation "Hough.java";
+}

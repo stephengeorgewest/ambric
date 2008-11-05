@@ -1,0 +1,20 @@
+package structures;
+
+interface BmpGrabberFifoStream
+{
+	inbound in;
+	outbound out;
+	property int width;
+	property int height;
+
+	inbound FifoMiddle_out;	outbound FifoMiddle_in;
+	inbound FifoTop_out; outbound FifoTop_in;
+}
+binding jBmpGrabberFifo implements BmpGrabberFifoStream
+{
+	//implementation "BmpGrabberFifoStream.java";
+	implementation "BmpGrabberFifoStreamUnpacked.java";
+
+	attribute MinimumBuffer(512+2) on FifoTop_out;
+	attribute MinimumBuffer(512+2) on FifoMiddle_out;
+}

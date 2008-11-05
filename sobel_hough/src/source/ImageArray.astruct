@@ -1,0 +1,10 @@
+package source;
+
+interface ImageArray
+{
+	outbound out;
+}
+binding jImageArray implements ImageArray
+{
+	implementation "ImageArray.java";	
+}

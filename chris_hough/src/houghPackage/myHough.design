@@ -1,0 +1,203 @@
+package houghPackage;
+
+import astruct.pcie.Vio;
+import houghPackage.translate_pixels_to_coordinates;
+import houghPackage.Hough_processor;
+
+design myHough {
+	Root_IF root_Inst;
+}
+
+interface Root_IF {}
+
+binding CompRoot implements Root_IF {
+	translate_pixels_to_coordinates translator;
+
+	Hough_processor proc_0 = {start_bin = 0, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 2097152, sine_val_0 = 0, cosine_val_1 = 2096833, sine_val_1 = 36600, 
+	cosine_val_2 = 2095875, sine_val_2 = 73190, cosine_val_3 = 2094278, sine_val_3 = 109756, max_r = 200, bp = 21};
+	Hough_processor proc_1 = {start_bin = 4, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 2092044, sine_val_0 = 146290, cosine_val_1 = 2089172, sine_val_1 = 182779, 
+	cosine_val_2 = 2085664, sine_val_2 = 219212, cosine_val_3 = 2081520, sine_val_3 = 255579, max_r = 200, bp = 21};
+	Hough_processor proc_2 = {start_bin = 8, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 2076743, sine_val_0 = 291867, cosine_val_1 = 2071333, sine_val_1 = 328067, 
+	cosine_val_2 = 2065292, sine_val_2 = 364167, cosine_val_3 = 2058621, sine_val_3 = 400155, max_r = 200, bp = 21};
+	Hough_processor proc_3 = {start_bin = 12, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 2051324, sine_val_0 = 436022, cosine_val_1 = 2043402, sine_val_1 = 471757, 
+	cosine_val_2 = 2034858, sine_val_2 = 507347, cosine_val_3 = 2025693, sine_val_3 = 542783, max_r = 200, bp = 21};
+	Hough_processor proc_4 = {start_bin = 16, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 2015912, sine_val_0 = 578053, cosine_val_1 = 2005516, sine_val_1 = 613148, 
+	cosine_val_2 = 1994510, sine_val_2 = 648056, cosine_val_3 = 1982896, sine_val_3 = 682766, max_r = 200, bp = 21};
+	Hough_processor proc_5 = {start_bin = 20, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1970678, sine_val_0 = 717268, cosine_val_1 = 1957860, sine_val_1 = 751552, 
+	cosine_val_2 = 1944446, sine_val_2 = 785607, cosine_val_3 = 1930439, sine_val_3 = 819423, max_r = 200, bp = 21};
+	Hough_processor proc_6 = {start_bin = 24, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1915844, sine_val_0 = 852989, cosine_val_1 = 1900665, sine_val_1 = 886295, 
+	cosine_val_2 = 1884908, sine_val_2 = 919331, cosine_val_3 = 1868576, sine_val_3 = 952087, max_r = 200, bp = 21};
+	Hough_processor proc_7 = {start_bin = 28, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1851675, sine_val_0 = 984553, cosine_val_1 = 1834211, sine_val_1 = 1016719, 
+	cosine_val_2 = 1816187, sine_val_2 = 1048576, cosine_val_3 = 1797610, sine_val_3 = 1080113, max_r = 200, bp = 21};
+	Hough_processor proc_8 = {start_bin = 32, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1778486, sine_val_0 = 1111321, cosine_val_1 = 1758820, sine_val_1 = 1142191, 
+	cosine_val_2 = 1738618, sine_val_2 = 1172713, cosine_val_3 = 1717886, sine_val_3 = 1202877, max_r = 200, bp = 21};
+	Hough_processor proc_9 = {start_bin = 36, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1696632, sine_val_0 = 1232675, cosine_val_1 = 1674860, sine_val_1 = 1262098, 
+	cosine_val_2 = 1652578, sine_val_2 = 1291136, cosine_val_3 = 1629793, sine_val_3 = 1319781, max_r = 200, bp = 21};
+	Hough_processor proc_10 = {start_bin = 40, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1606512, sine_val_0 = 1348023, cosine_val_1 = 1582741, sine_val_1 = 1375856, 
+	cosine_val_2 = 1558488, sine_val_2 = 1403269, cosine_val_3 = 1533760, sine_val_3 = 1430254, max_r = 200, bp = 21};
+	Hough_processor proc_11 = {start_bin = 44, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1508565, sine_val_0 = 1456804, cosine_val_1 = 1482910, sine_val_1 = 1482910, 
+	cosine_val_2 = 1456804, sine_val_2 = 1508565, cosine_val_3 = 1430254, sine_val_3 = 1533760, max_r = 200, bp = 21};
+	Hough_processor proc_12 = {start_bin = 48, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1403269, sine_val_0 = 1558488, cosine_val_1 = 1375856, sine_val_1 = 1582741, 
+	cosine_val_2 = 1348023, sine_val_2 = 1606512, cosine_val_3 = 1319781, sine_val_3 = 1629793, max_r = 200, bp = 21};
+	Hough_processor proc_13 = {start_bin = 52, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1291136, sine_val_0 = 1652578, cosine_val_1 = 1262098, sine_val_1 = 1674860, 
+	cosine_val_2 = 1232675, sine_val_2 = 1696632, cosine_val_3 = 1202877, sine_val_3 = 1717886, max_r = 200, bp = 21};
+	Hough_processor proc_14 = {start_bin = 56, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1172713, sine_val_0 = 1738618, cosine_val_1 = 1142191, sine_val_1 = 1758820, 
+	cosine_val_2 = 1111321, sine_val_2 = 1778486, cosine_val_3 = 1080113, sine_val_3 = 1797610, max_r = 200, bp = 21};
+	Hough_processor proc_15 = {start_bin = 60, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 1048576, sine_val_0 = 1816187, cosine_val_1 = 1016719, sine_val_1 = 1834211, 
+	cosine_val_2 = 984553, sine_val_2 = 1851675, cosine_val_3 = 952087, sine_val_3 = 1868576, max_r = 200, bp = 21};
+	Hough_processor proc_16 = {start_bin = 64, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 919331, sine_val_0 = 1884908, cosine_val_1 = 886295, sine_val_1 = 1900665, 
+	cosine_val_2 = 852989, sine_val_2 = 1915844, cosine_val_3 = 819423, sine_val_3 = 1930439, max_r = 200, bp = 21};
+	Hough_processor proc_17 = {start_bin = 68, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 785607, sine_val_0 = 1944446, cosine_val_1 = 751552, sine_val_1 = 1957860, 
+	cosine_val_2 = 717268, sine_val_2 = 1970678, cosine_val_3 = 682766, sine_val_3 = 1982896, max_r = 200, bp = 21};
+	Hough_processor proc_18 = {start_bin = 72, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 648056, sine_val_0 = 1994510, cosine_val_1 = 613148, sine_val_1 = 2005516, 
+	cosine_val_2 = 578053, sine_val_2 = 2015912, cosine_val_3 = 542783, sine_val_3 = 2025693, max_r = 200, bp = 21};
+	Hough_processor proc_19 = {start_bin = 76, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 507347, sine_val_0 = 2034858, cosine_val_1 = 471757, sine_val_1 = 2043402, 
+	cosine_val_2 = 436022, sine_val_2 = 2051324, cosine_val_3 = 400155, sine_val_3 = 2058621, max_r = 200, bp = 21};
+	Hough_processor proc_20 = {start_bin = 80, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 364167, sine_val_0 = 2065292, cosine_val_1 = 328067, sine_val_1 = 2071333, 
+	cosine_val_2 = 291867, sine_val_2 = 2076743, cosine_val_3 = 255579, sine_val_3 = 2081520, max_r = 200, bp = 21};
+	Hough_processor proc_21 = {start_bin = 84, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 219212, sine_val_0 = 2085664, cosine_val_1 = 182779, sine_val_1 = 2089172, 
+	cosine_val_2 = 146290, sine_val_2 = 2092044, cosine_val_3 = 109756, sine_val_3 = 2094278, max_r = 200, bp = 21};
+	Hough_processor proc_22 = {start_bin = 88, col_size = 401, bin_count = 4, 
+	cosine_val_0 = 73190, sine_val_0 = 2095875, cosine_val_1 = 36600, sine_val_1 = 2096833, 
+	cosine_val_2 = 0, sine_val_2 = 2097152, cosine_val_3 = -36600, sine_val_3 = 2096833, max_r = 200, bp = 21};
+	Hough_processor proc_23 = {start_bin = 92, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -73190, sine_val_0 = 2095875, cosine_val_1 = -109756, sine_val_1 = 2094278, 
+	cosine_val_2 = -146290, sine_val_2 = 2092044, cosine_val_3 = -182779, sine_val_3 = 2089172, max_r = 200, bp = 21};
+	Hough_processor proc_24 = {start_bin = 96, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -219212, sine_val_0 = 2085664, cosine_val_1 = -255579, sine_val_1 = 2081520, 
+	cosine_val_2 = -291867, sine_val_2 = 2076743, cosine_val_3 = -328067, sine_val_3 = 2071333, max_r = 200, bp = 21};
+	Hough_processor proc_25 = {start_bin = 100, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -364167, sine_val_0 = 2065292, cosine_val_1 = -400155, sine_val_1 = 2058621, 
+	cosine_val_2 = -436022, sine_val_2 = 2051324, cosine_val_3 = -471757, sine_val_3 = 2043402, max_r = 200, bp = 21};
+	Hough_processor proc_26 = {start_bin = 104, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -507347, sine_val_0 = 2034858, cosine_val_1 = -542783, sine_val_1 = 2025693, 
+	cosine_val_2 = -578053, sine_val_2 = 2015912, cosine_val_3 = -613148, sine_val_3 = 2005516, max_r = 200, bp = 21};
+	Hough_processor proc_27 = {start_bin = 108, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -648056, sine_val_0 = 1994510, cosine_val_1 = -682766, sine_val_1 = 1982896, 
+	cosine_val_2 = -717268, sine_val_2 = 1970678, cosine_val_3 = -751552, sine_val_3 = 1957860, max_r = 200, bp = 21};
+	Hough_processor proc_28 = {start_bin = 112, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -785607, sine_val_0 = 1944446, cosine_val_1 = -819423, sine_val_1 = 1930439, 
+	cosine_val_2 = -852989, sine_val_2 = 1915844, cosine_val_3 = -886295, sine_val_3 = 1900665, max_r = 200, bp = 21};
+	Hough_processor proc_29 = {start_bin = 116, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -919331, sine_val_0 = 1884908, cosine_val_1 = -952087, sine_val_1 = 1868576, 
+	cosine_val_2 = -984553, sine_val_2 = 1851675, cosine_val_3 = -1016719, sine_val_3 = 1834211, max_r = 200, bp = 21};
+	Hough_processor proc_30 = {start_bin = 120, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1048576, sine_val_0 = 1816187, cosine_val_1 = -1080113, sine_val_1 = 1797610, 
+	cosine_val_2 = -1111321, sine_val_2 = 1778486, cosine_val_3 = -1142191, sine_val_3 = 1758820, max_r = 200, bp = 21};
+	Hough_processor proc_31 = {start_bin = 124, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1172713, sine_val_0 = 1738618, cosine_val_1 = -1202877, sine_val_1 = 1717886, 
+	cosine_val_2 = -1232675, sine_val_2 = 1696632, cosine_val_3 = -1262098, sine_val_3 = 1674860, max_r = 200, bp = 21};
+	Hough_processor proc_32 = {start_bin = 128, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1291136, sine_val_0 = 1652578, cosine_val_1 = -1319781, sine_val_1 = 1629793, 
+	cosine_val_2 = -1348023, sine_val_2 = 1606512, cosine_val_3 = -1375856, sine_val_3 = 1582741, max_r = 200, bp = 21};
+	Hough_processor proc_33 = {start_bin = 132, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1403269, sine_val_0 = 1558488, cosine_val_1 = -1430254, sine_val_1 = 1533760, 
+	cosine_val_2 = -1456804, sine_val_2 = 1508565, cosine_val_3 = -1482910, sine_val_3 = 1482910, max_r = 200, bp = 21};
+	Hough_processor proc_34 = {start_bin = 136, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1508565, sine_val_0 = 1456804, cosine_val_1 = -1533760, sine_val_1 = 1430254, 
+	cosine_val_2 = -1558488, sine_val_2 = 1403269, cosine_val_3 = -1582741, sine_val_3 = 1375856, max_r = 200, bp = 21};
+	Hough_processor proc_35 = {start_bin = 140, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1606512, sine_val_0 = 1348023, cosine_val_1 = -1629793, sine_val_1 = 1319781, 
+	cosine_val_2 = -1652578, sine_val_2 = 1291136, cosine_val_3 = -1674860, sine_val_3 = 1262098, max_r = 200, bp = 21};
+	Hough_processor proc_36 = {start_bin = 144, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1696632, sine_val_0 = 1232675, cosine_val_1 = -1717886, sine_val_1 = 1202877, 
+	cosine_val_2 = -1738618, sine_val_2 = 1172713, cosine_val_3 = -1758820, sine_val_3 = 1142191, max_r = 200, bp = 21};
+	Hough_processor proc_37 = {start_bin = 148, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1778486, sine_val_0 = 1111321, cosine_val_1 = -1797610, sine_val_1 = 1080113, 
+	cosine_val_2 = -1816187, sine_val_2 = 1048576, cosine_val_3 = -1834211, sine_val_3 = 1016719, max_r = 200, bp = 21};
+	Hough_processor proc_38 = {start_bin = 152, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1851675, sine_val_0 = 984553, cosine_val_1 = -1868576, sine_val_1 = 952087, 
+	cosine_val_2 = -1884908, sine_val_2 = 919331, cosine_val_3 = -1900665, sine_val_3 = 886295, max_r = 200, bp = 21};
+	Hough_processor proc_39 = {start_bin = 156, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1915844, sine_val_0 = 852989, cosine_val_1 = -1930439, sine_val_1 = 819423, 
+	cosine_val_2 = -1944446, sine_val_2 = 785607, cosine_val_3 = -1957860, sine_val_3 = 751552, max_r = 200, bp = 21};
+	Hough_processor proc_40 = {start_bin = 160, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -1970678, sine_val_0 = 717268, cosine_val_1 = -1982896, sine_val_1 = 682766, 
+	cosine_val_2 = -1994510, sine_val_2 = 648056, cosine_val_3 = -2005516, sine_val_3 = 613148, max_r = 200, bp = 21};
+	Hough_processor proc_41 = {start_bin = 164, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -2015912, sine_val_0 = 578053, cosine_val_1 = -2025693, sine_val_1 = 542783, 
+	cosine_val_2 = -2034858, sine_val_2 = 507347, cosine_val_3 = -2043402, sine_val_3 = 471757, max_r = 200, bp = 21};
+	Hough_processor proc_42 = {start_bin = 168, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -2051324, sine_val_0 = 436022, cosine_val_1 = -2058621, sine_val_1 = 400155, 
+	cosine_val_2 = -2065292, sine_val_2 = 364167, cosine_val_3 = -2071333, sine_val_3 = 328067, max_r = 200, bp = 21};
+	Hough_processor proc_43 = {start_bin = 172, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -2076743, sine_val_0 = 291867, cosine_val_1 = -2081520, sine_val_1 = 255579, 
+	cosine_val_2 = -2085664, sine_val_2 = 219212, cosine_val_3 = -2089172, sine_val_3 = 182779, max_r = 200, bp = 21};
+	Hough_processor proc_44 = {start_bin = 176, col_size = 401, bin_count = 4, 
+	cosine_val_0 = -2092044, sine_val_0 = 146290, cosine_val_1 = -2094278, sine_val_1 = 109756, 
+	cosine_val_2 = -2095875, sine_val_2 = 73190, cosine_val_3 = -2096833, sine_val_3 = 36600, max_r = 200, bp = 21};
+
+	Vio inOut = {numSources = 1, numSinks = 1};
+	
+	channel c0 = {inOut.out[0],translator.in};
+	channel c1 = {translator.out,proc_0.in};
+	
+	channel ch_0 = {proc_0.out,proc_1.in};
+	channel ch_1 = {proc_1.out,proc_2.in};
+	channel ch_2 = {proc_2.out,proc_3.in};
+	channel ch_3 = {proc_3.out,proc_4.in};
+	channel ch_4 = {proc_4.out,proc_5.in};
+	channel ch_5 = {proc_5.out,proc_6.in};
+	channel ch_6 = {proc_6.out,proc_7.in};
+	channel ch_7 = {proc_7.out,proc_8.in};
+	channel ch_8 = {proc_8.out,proc_9.in};
+	channel ch_9 = {proc_9.out,proc_10.in};
+	channel ch_10 = {proc_10.out,proc_11.in};
+	channel ch_11 = {proc_11.out,proc_12.in};
+	channel ch_12 = {proc_12.out,proc_13.in};
+	channel ch_13 = {proc_13.out,proc_14.in};
+	channel ch_14 = {proc_14.out,proc_15.in};
+	channel ch_15 = {proc_15.out,proc_16.in};
+	channel ch_16 = {proc_16.out,proc_17.in};
+	channel ch_17 = {proc_17.out,proc_18.in};
+	channel ch_18 = {proc_18.out,proc_19.in};
+	channel ch_19 = {proc_19.out,proc_20.in};
+	channel ch_20 = {proc_20.out,proc_21.in};
+	channel ch_21 = {proc_21.out,proc_22.in};
+	channel ch_22 = {proc_22.out,proc_23.in};
+	channel ch_23 = {proc_23.out,proc_24.in};
+	channel ch_24 = {proc_24.out,proc_25.in};
+	channel ch_25 = {proc_25.out,proc_26.in};
+	channel ch_26 = {proc_26.out,proc_27.in};
+	channel ch_27 = {proc_27.out,proc_28.in};
+	channel ch_28 = {proc_28.out,proc_29.in};
+	channel ch_29 = {proc_29.out,proc_30.in};
+	channel ch_30 = {proc_30.out,proc_31.in};
+	channel ch_31 = {proc_31.out,proc_32.in};
+	channel ch_32 = {proc_32.out,proc_33.in};
+	channel ch_33 = {proc_33.out,proc_34.in};
+	channel ch_34 = {proc_34.out,proc_35.in};
+	channel ch_35 = {proc_35.out,proc_36.in};
+	channel ch_36 = {proc_36.out,proc_37.in};
+	channel ch_37 = {proc_37.out,proc_38.in};
+	channel ch_38 = {proc_38.out,proc_39.in};
+	channel ch_39 = {proc_39.out,proc_40.in};
+	channel ch_40 = {proc_40.out,proc_41.in};
+	channel ch_41 = {proc_41.out,proc_42.in};
+	channel ch_42 = {proc_42.out,proc_43.in};
+	channel ch_43 = {proc_43.out,proc_44.in};
+	channel ch_44 = {proc_44.out,inOut.in[0]};	
+	
+}

@@ -1,0 +1,11 @@
+package structures;
+
+interface Hough
+{
+	inbound in;
+	outbound out;
+}
+binding JHough implements Hough
+{
+	implementation "Hough.java";
+}

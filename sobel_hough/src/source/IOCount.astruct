@@ -1,0 +1,11 @@
+package source;
+
+interface IOCount
+{
+	inbound in;
+	outbound out;
+}
+binding jIOCount implements IOCount
+{
+	implementation "IOCount.java";	
+}

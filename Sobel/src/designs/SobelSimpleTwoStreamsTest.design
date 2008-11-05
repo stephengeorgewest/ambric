@@ -1,0 +1,30 @@
+package designs;
+
+import astruct.pcie.Vio;
+//import astruct.primitives.Sink;
+import imageProcess.BmpGrabberSimpleTwoStreams;
+import imageProcess.Sobel;
+import imageProcess.BmpSaverTwoStreams;
+
+interface Root{}
+design Top
+{
+	Root Root;
+}
+binding CRoot implements Root
+{
+	Vio InOut = { numSources=1, numSinks = 1};
+	BmpGrabberSimpleTwoStreams imageIn;
+	Sobel sobel1;
+	Sobel sobel2;
+	BmpSaverTwoStreams imageOut;
+
+	
+	channel c0 = {InOut.out[0],imageIn.in};
+	channel c1 = {imageIn.out_1,sobel1.in};
+	channel c2 = {imageIn.out_2,sobel2.in};
+	channel c3= {sobel1.out,imageOut.in_1};
+	channel c4= {sobel2.out,imageOut.in_2};
+	//attribute PortTap ("sobel_in.file") on sobel.in;
+	channel c11 = {imageOut.out, InOut.in[0]};
+}

@@ -1,0 +1,11 @@
+package structures;
+
+interface Sobel
+{
+	inbound in;
+	outbound out;
+}
+binding JSobel implements Sobel
+{
+	implementation "Sobel.java";
+}

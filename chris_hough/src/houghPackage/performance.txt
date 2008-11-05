@@ -1,0 +1,2 @@
+interval myInterval 100 on root_Inst.translator
+window readLoop addr 1:20 on root_Inst.translator
