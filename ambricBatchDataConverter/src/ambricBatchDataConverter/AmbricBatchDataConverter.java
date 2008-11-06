@@ -1,34 +1,23 @@
 package ambricBatchDataConverter;
 
 import java.io.*;
-import java.util.TreeSet;
-import java.util.LinkedList;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-
-import javax.imageio.*;
 import javax.swing.*;
 
 public class AmbricBatchDataConverter
 {
 	public static void main(String[] s) throws IOException, NumberFormatException
 	{
-		InputStreamReader converter = new InputStreamReader(System.in);
-		BufferedReader in = new BufferedReader(converter);
 		int width=316;//yos
 		int height=252;//yos
-		JOptionPane options = new JOptionPane();
 		String str="";
-		str = options.showInputDialog("Width = "+width);
+		str = JOptionPane.showInputDialog("Width = "+width);
 		if(str.length()>0)
 			width=Integer.parseInt(str);
-		str = options.showInputDialog("Height = "+height);
+		str = JOptionPane.showInputDialog("Height = "+height);
 		if(str.length()>0)
 			height=Integer.parseInt(str);
 		
-		JOptionPane again = new JOptionPane();
-		again.showMessageDialog(null,"Width="+width+" Height="+height,"You choose",2);
+		JOptionPane.showMessageDialog(null,"Width="+width+" Height="+height,"You choose",2);
 		/*
 		int width=352;//flower
 		int height=240;//flower*/
