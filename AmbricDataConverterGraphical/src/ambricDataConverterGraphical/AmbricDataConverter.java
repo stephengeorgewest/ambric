@@ -311,7 +311,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 		double max_radius_hough = hough_image.getHeight()/2; 
 		int r=45;
 		int a=45;
-		int i = 0xaa;
+		//int i = 0xaa;
 		/*
 		for(a=0;a<180;a+=10)
 		lineDraw(
