@@ -29,7 +29,7 @@ binding cRoot implements RootTest
 	Vio vio = {numSources=0, numSinks=1};
 	source_x_y_t source = {width=width, height=height};
 	D_split split = {width=width, height=height};
-	DDRTest DDRTest = {width=width-4, height=height-4};
+	DDRTest ddrtest = {width=width-4, height=height-4};
 	
 	Sink dy;
 	Sink dx;
@@ -37,8 +37,8 @@ binding cRoot implements RootTest
 	channel c0 = {source.out, split.in};
 	channel ca = {split.dx, dx.in};
 	channel cb = {split.dy, dy.in};
-	channel c1 = {split.dt, DDRTest.in};
-	channel c2 = {DDRTest.out, vio.in[0]};
+	channel c1 = {split.dt, ddrtest.in};
+	channel c2 = {ddrtest.out, vio.in[0]};
 	
 	//attribute PortTap("dt_out.ambricFile") on dt.out;
 }
