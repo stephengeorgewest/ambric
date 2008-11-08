@@ -1,0 +1,41 @@
+package velocity;
+
+import utility.Dup3;
+import utility.Join3;
+
+interface Div3wide
+{
+	inbound numerator;
+	inbound denominator;
+	outbound value;
+	
+	property int fraction_bits = 0;
+	property int max_int;
+}
+
+binding aDiv3wide implements Div3wide
+{
+	Dup3 dup_num;
+	Dup3 dup_den;
+	Divider div1 = {fraction_bits=fraction_bits, max_int=max_int};
+	Divider div2 = {fraction_bits=fraction_bits, max_int=max_int};
+	Divider div3 = {fraction_bits=fraction_bits, max_int=max_int};
+	Join3 join;
+	
+	channel cnin = {numerator, dup_num.in};
+	channel cdin = {denominator, dup_den.in};
+	
+	channel cd1n = {dup_num.out_1, div1.numerator};
+	channel cd1d = {dup_den.out_1, div1.denominator};
+	channel cd1v = {div1.value, join.in_1};
+	
+	channel cd2n = {dup_num.out_2, div1.numerator};
+	channel cd2d = {dup_den.out_2, div1.denominator};
+	channel cd2v = {div1.value, join.in_2};
+	
+	channel cd3n = {dup_num.out_3, div1.numerator};
+	channel cd3d = {dup_den.out_3, div1.denominator};
+	channel cd3v = {div1.value, join.in_3};
+	
+	channel cvout = {join.out, value};
+}
