@@ -28,8 +28,8 @@ binding aK implements K_calc
 	K_1 k1 = {fraction_bits = fraction_bits};
 	K_2 k2 = {fraction_bits = fraction_bits};
 	Add add;
-	DupFork den_fork;
-	DupFork vx_fork;
+	DupFork den_fork={mode=ForkMode.SR};
+	DupFork vx_fork={mode=ForkMode.SR};
 	Shift shift = {shift_by = fraction_bits};
 	Source constant_28 = { initialValue = 28, incrementValue = 0 };
 	Divider div = {fraction_bits = 0, max_int = 0xFFFF};

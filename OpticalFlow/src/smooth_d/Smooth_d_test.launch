@@ -17,11 +17,15 @@
 </mapAttribute>
 <intAttribute key="com.ambric.adesigner.launcher.port" value="1697"/>
 <stringAttribute key="com.ambric.adesigner.launcher.profilingCapture" value=""/>
-<stringAttribute key="com.ambric.adesigner.launcher.project" value="Optical Flow"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.profilingEnabled" value="false"/>
+<booleanAttribute key="com.ambric.adesigner.launcher.profilingHw" value="false"/>
+<stringAttribute key="com.ambric.adesigner.launcher.profilingMeas" value=""/>
+<stringAttribute key="com.ambric.adesigner.launcher.project" value="OpticalFlow"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressGen" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressHw" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressSim" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.simHalt" value="false"/>
 <intAttribute key="com.ambric.adesigner.launcher.simJavaIss" value="0"/>
 <intAttribute key="com.ambric.adesigner.launcher.type" value="2"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="{0}"/>
 </launchConfiguration>

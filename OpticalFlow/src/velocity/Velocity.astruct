@@ -25,23 +25,32 @@ interface Velocity
 	property boolean match_roger = false;
 	property boolean optmimize = true;
 }
-binding aVelocity implements Velocity when (optmimize==false)
+binding aVelocityOpt implements Velocity when (optmimize==true)
 {
 	void generate()
 	{
-		
 		Dup3 xx_split;
+		xx_split.name="xx_velocity_split";
 		Dup3 xy_split;
+		xy_split.name="xy_velocity_split";
 		Dup3 xt_split;
+		xt_split.name="xt_velocity_split";
 		Dup3 yy_split;
+		yy_split.name="yy_velocity_split";
 		Dup3 yt_split;
+		yt_split.name="yt_velocity_split";
 		
 		Source k0 ={ initialValue = 0, incrementValue = 0 };
+		k0.name="k0_source";
 		V v1 = {fraction_bits = fraction_bits};
+		v1.name="V1";
 		
 		K_calc k1 = {fraction_bits = fraction_bits};
+		k1.name="K";
 		V v2 = {fraction_bits = fraction_bits};
+		v2.name="V2";
 		Sink den1;
+		den1.name="Denominator_sink";
 		if(match_roger)
 		{
 			
@@ -91,12 +100,19 @@ binding aVelocity implements Velocity when (optmimize==false)
 		channel ck10 = {v1.Vx, k1.Vx};
 		channel ck11 = {v1.Vy, k1.Vy};
 		channel ck122 = {v1.denominator, k1.denominator};
+		attribute MinimumBuffer(25) on v1.Vx;
+		attribute MinimumBuffer(25) on v1.Vy;
 		channel ck12 = {xx_split.out_2, k1.xx};
 		channel ck13 = {xy_split.out_2, k1.xy};
 		channel ck14 = {xt_split.out_2, k1.xt};
 		channel ck15 = {yy_split.out_2, k1.yy};
-		channel ck16 = {yt_split.out_2, k1.yt};
-	
+		channel ck16 = {yt_split.out_2, k1.yt};/*
+		attribute MinimumBuffer(50) on xx_split.out_2;
+		attribute MinimumBuffer(50) on xy_split.out_2;
+		attribute MinimumBuffer(50) on xt_split.out_2;
+		attribute MinimumBuffer(50) on yy_split.out_2;
+		attribute MinimumBuffer(50) on yt_split.out_2;
+	*/
 		if(match_roger)
 		{
 			channel ck17 = {g_tt_smooth,   k1.tt};
@@ -113,102 +129,13 @@ binding aVelocity implements Velocity when (optmimize==false)
 		channel cv23 = {xy_split.out_3, v2.xy};
 		channel cv24 = {xt_split.out_3, v2.xt};
 		channel cv25 = {yy_split.out_3, v2.yy};
-		channel cv26 = {yt_split.out_3, v2.yt};
-		
-		channel cout1 = {v2.Vx, Vx};
-		channel cout2 = {v2.Vy, Vy};
-		channel cout3 = {v2.denominator, den1.in};
-	}
-}binding aVelocityOpt implements Velocity when (optmimize==true)
-{
-	void generate()
-	{
-		
-		Dup3 xx_split;
-		Dup3 xy_split;
-		Dup3 xt_split;
-		Dup3 yy_split;
-		Dup3 yt_split;
-		
-		Source k0 ={ initialValue = 0, incrementValue = 0 };
-		V v1 = {fraction_bits = fraction_bits};
-		
-		K_calc k1 = {fraction_bits = fraction_bits};
-		V v2 = {fraction_bits = fraction_bits};
-		Sink den1;
-		if(match_roger)
-		{
-			
-			channel c0 = {g_xx_smooth, xx_split.in};
-			channel c1 = {g_xy_smooth, xy_split.in};
-			channel c2 = {g_xt_smooth, xt_split.in};
-			channel c3 = {g_yy_smooth, yy_split.in};
-			channel c4 = {g_yt_smooth, yt_split.in};
-		}
-		else
-		{
-			/*
-			channel c0 = {g_xx_smooth, xx_split.in};
-			channel c1 = {g_xy_smooth, xy_split.in};
-			channel c2 = {g_xt_smooth, xt_split.in};
-			channel c3 = {g_yy_smooth, yy_split.in};
-			channel c4 = {g_yt_smooth, yt_split.in};
-			/**/
-	
-		
-			Shift shiftxx = {shift_by=shift_by};
-			Shift shiftxy = {shift_by=shift_by};
-			Shift shiftxt = {shift_by=shift_by};
-			Shift shiftyy = {shift_by=shift_by};
-			Shift shiftyt = {shift_by=shift_by};
-			
-			
-			channel c00 = {g_xx_smooth, shiftxx.in};
-			channel c01 = {shiftxx.out, xx_split.in};
-			channel c10 = {g_xy_smooth, shiftxy.in};
-			channel c11 = {shiftxy.out,  xy_split.in};
-			channel c20 = {g_xt_smooth, shiftxt.in};
-			channel c21 = {shiftxt.out,  xt_split.in};
-			channel c30 = {g_yy_smooth, shiftyy.in};
-			channel c31 = {shiftyy.out,  yy_split.in};
-			channel c40 = {g_yt_smooth, shiftyt.in};
-			channel c41 = {shiftyt.out,  yt_split.in};
-		
-		}
-		channel cv11 = {k0.out, v1.k};
-		channel cv12 = {xx_split.out_1, v1.xx};
-		channel cv13 = {xy_split.out_1, v1.xy};
-		channel cv14 = {xt_split.out_1, v1.xt};
-		channel cv15 = {yy_split.out_1, v1.yy};
-		channel cv16 = {yt_split.out_1, v1.yt};
-		
-		channel ck10 = {v1.Vx, k1.Vx};
-		channel ck11 = {v1.Vy, k1.Vy};
-		channel ck122 = {v1.denominator, k1.denominator};
-		channel ck12 = {xx_split.out_2, k1.xx};
-		channel ck13 = {xy_split.out_2, k1.xy};
-		channel ck14 = {xt_split.out_2, k1.xt};
-		channel ck15 = {yy_split.out_2, k1.yy};
-		channel ck16 = {yt_split.out_2, k1.yt};
-	
-		if(match_roger)
-		{
-			channel ck17 = {g_tt_smooth,   k1.tt};
-		}
-		else
-		{
-			Shift shifttt = {shift_by=shift_by};
-			channel ck17 = {g_tt_smooth, shifttt.in};
-			channel ck171 = {shifttt.out, k1.tt};
-		}
-		
-		channel cv21 = {k1.K, v2.k};
-		channel cv22 = {xx_split.out_3, v2.xx};
-		channel cv23 = {xy_split.out_3, v2.xy};
-		channel cv24 = {xt_split.out_3, v2.xt};
-		channel cv25 = {yy_split.out_3, v2.yy};
-		channel cv26 = {yt_split.out_3, v2.yt};
-		
+		channel cv26 = {yt_split.out_3, v2.yt};/*
+		attribute MinimumBuffer(50) on xx_split.out_3;
+		attribute MinimumBuffer(50) on xy_split.out_3;
+		attribute MinimumBuffer(50) on xt_split.out_3;
+		attribute MinimumBuffer(50) on yy_split.out_3;
+		attribute MinimumBuffer(50) on yt_split.out_3;
+		*/
 		channel cout1 = {v2.Vx, Vx};
 		channel cout2 = {v2.Vy, Vy};
 		channel cout3 = {v2.denominator, den1.in};
