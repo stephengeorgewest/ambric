@@ -1,0 +1,32 @@
+package Zeroed;
+
+import astruct.pcie.Vio;
+//import astruct.primitives.Source;
+//import astruct.primitives.Sink;
+
+//import astruct.debug_master.DebugMaster;
+//import astruct.pcie.Vio;
+
+const int width = 316;
+const int height = 252;
+
+interface Root{}
+
+design OpticalFlowTop
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=1, numSinks=2};
+	OpticalFlow opticalflow={width=width, height=height};
+
+	channel c0 = {vio.out[0],opticalflow.in};
+	channel c21 = {opticalflow.Vx, vio.in[0]};//Vx_sink.in};
+	channel c22 = {opticalflow.Vy, vio.in[1]};//Vy_sink.in};
+}
