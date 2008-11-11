@@ -62,6 +62,8 @@ binding aOpticalFlow implements OpticalFlow
 	channel c19 = {velocity.Vx, smooth_v_x.V};
 	channel c20 = {velocity.Vy, smooth_v_y.V};
 
+	attribute MinimumBuffer(16) on Vx;
+	attribute MinimumBuffer(16) on Vy;
 	channel c21 = {smooth_v_x.V_smooth, Vx};
 	channel c22 = {smooth_v_y.V_smooth, Vy};
 }

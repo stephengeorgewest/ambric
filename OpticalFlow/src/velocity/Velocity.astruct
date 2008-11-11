@@ -96,6 +96,12 @@ binding aVelocityOpt implements Velocity when (optmimize==true)
 		channel cv14 = {xt_split.out_1, v1.xt};
 		channel cv15 = {yy_split.out_1, v1.yy};
 		channel cv16 = {yt_split.out_1, v1.yt};
+		attribute MinimumBuffer(16) on xx_split.out_1;
+		attribute MinimumBuffer(16) on xy_split.out_1;
+		attribute MinimumBuffer(16) on xt_split.out_1;
+		attribute MinimumBuffer(16) on yy_split.out_1;
+		attribute MinimumBuffer(16) on yt_split.out_1;
+	
 		
 		channel ck10 = {v1.Vx, k1.Vx};
 		channel ck11 = {v1.Vy, k1.Vy};
@@ -106,13 +112,13 @@ binding aVelocityOpt implements Velocity when (optmimize==true)
 		channel ck13 = {xy_split.out_2, k1.xy};
 		channel ck14 = {xt_split.out_2, k1.xt};
 		channel ck15 = {yy_split.out_2, k1.yy};
-		channel ck16 = {yt_split.out_2, k1.yt};/*
-		attribute MinimumBuffer(50) on xx_split.out_2;
-		attribute MinimumBuffer(50) on xy_split.out_2;
-		attribute MinimumBuffer(50) on xt_split.out_2;
-		attribute MinimumBuffer(50) on yy_split.out_2;
-		attribute MinimumBuffer(50) on yt_split.out_2;
-	*/
+		channel ck16 = {yt_split.out_2, k1.yt};
+		attribute MinimumBuffer(16) on xx_split.out_2;
+		attribute MinimumBuffer(16) on xy_split.out_2;
+		attribute MinimumBuffer(16) on xt_split.out_2;
+		attribute MinimumBuffer(16) on yy_split.out_2;
+		attribute MinimumBuffer(16) on yt_split.out_2;
+	
 		if(match_roger)
 		{
 			channel ck17 = {g_tt_smooth,   k1.tt};
@@ -129,13 +135,13 @@ binding aVelocityOpt implements Velocity when (optmimize==true)
 		channel cv23 = {xy_split.out_3, v2.xy};
 		channel cv24 = {xt_split.out_3, v2.xt};
 		channel cv25 = {yy_split.out_3, v2.yy};
-		channel cv26 = {yt_split.out_3, v2.yt};/*
-		attribute MinimumBuffer(50) on xx_split.out_3;
-		attribute MinimumBuffer(50) on xy_split.out_3;
-		attribute MinimumBuffer(50) on xt_split.out_3;
-		attribute MinimumBuffer(50) on yy_split.out_3;
-		attribute MinimumBuffer(50) on yt_split.out_3;
-		*/
+		channel cv26 = {yt_split.out_3, v2.yt};
+		attribute MinimumBuffer(16) on xx_split.out_3;
+		attribute MinimumBuffer(16) on xy_split.out_3;
+		attribute MinimumBuffer(16) on xt_split.out_3;
+		attribute MinimumBuffer(16) on yy_split.out_3;
+		attribute MinimumBuffer(16) on yt_split.out_3;
+		
 		channel cout1 = {v2.Vx, Vx};
 		channel cout2 = {v2.Vy, Vy};
 		channel cout3 = {v2.denominator, den1.in};

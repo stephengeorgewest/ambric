@@ -11,6 +11,6 @@ interface Divider
 }
 binding jDivider implements Divider
 {
-	//implementation "Divider.java";
-	implementation "DividerEmpty.java";
+	implementation "Divider.java";
+	//implementation "DividerEmpty.java";
 }
