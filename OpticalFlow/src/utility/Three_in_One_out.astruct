@@ -1,0 +1,14 @@
+package utility;
+
+interface Three_in_One_out
+{
+	inbound in_1;
+	inbound in_2;
+	inbound in_3;
+	
+	outbound out;
+}
+binding jThree_in_One_out implements Three_in_One_out
+{
+	implementation "Three_in_One_out.java";
+}

@@ -1,0 +1,29 @@
+package utility;
+
+interface Six_in_Two_out
+{
+	inbound in_1;
+	inbound in_2;
+	inbound in_3;
+	inbound in_4;
+	inbound in_5;
+	inbound in_6;
+	
+	outbound out_1;
+	outbound out_2;
+}
+binding aSix_in_Two_out implements Six_in_Two_out
+{
+	Three_in_One_out a;
+	Three_in_One_out b;
+	
+	channel c0 = {in_1, a.in_1};
+	channel c1 = {in_2, a.in_2};
+	channel c2 = {in_3, a.in_3};
+	channel c3 = {a.out, out_1};
+	
+	channel cb0 = {in_4, b.in_1};
+	channel cb1 = {in_5, b.in_2};
+	channel cb2 = {in_6, b.in_3};
+	channel cb3 = {b.out, out_2};
+}

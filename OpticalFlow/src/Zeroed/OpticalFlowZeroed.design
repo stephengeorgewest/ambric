@@ -24,7 +24,7 @@ design OpticalFlowTop
 binding cRoot implements Root
 {
 	Vio vio = {numSources=1, numSinks=2};
-	OpticalFlow opticalflow={width=width, height=height};
+	OpticalFlowDiv_Vsmooth_OP_sm_zeroed opticalflow={width=width, height=height};
 
 	channel c0 = {vio.out[0],opticalflow.in};
 	channel c21 = {opticalflow.Vx, vio.in[0]};//Vx_sink.in};
