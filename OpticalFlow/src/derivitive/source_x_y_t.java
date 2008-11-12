@@ -19,6 +19,6 @@ public class source_x_y_t
 			for(int y=0;y<h; y++)
 				for(int x=0; x<w;x++)
 					out.writeInt(x<<20|y<<8|t);
-		while(true){}
+		//while(true){}
 	}
 }
