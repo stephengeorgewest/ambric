@@ -1,4 +1,4 @@
-package derivitive;
+package derivative;
 
 //import astruct.primitives.Fifo;
 import utility.Shift_and_Saturate;
@@ -6,7 +6,7 @@ import utility.Shift_Saturate;
 import utility.Saturate;
 import utility.Shift;
 
-interface Derivitive
+interface Derivative
 {
 	inbound in;
 	outbound dx_out;
@@ -17,7 +17,7 @@ interface Derivitive
 	property int height;
 	property boolean match_roger = false;
 }
-binding aDerivitive implements Derivitive
+binding aDerivitive implements Derivative
 {
 	D_split split = {width=width, height=height};//only feeds the pixels that each kernel needs
 	DDR_delay dx_delay = {width=width, height=height-4, offset=(width-4)*(height-4)*5, port =1};

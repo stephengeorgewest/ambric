@@ -2,7 +2,7 @@ package velocity;
 
 import astruct.pcie.Vio;
 
-import derivitive.Derivitive;
+import derivative.Derivative;
 import smooth_d.Smooth_d;
 import outer_product.Outer_Product;
 import smooth_op.Smooth_OP;

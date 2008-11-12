@@ -2,7 +2,7 @@ package smooth_op;
 
 import astruct.pcie.Vio;
 
-import derivitive.Derivitive;
+import derivative.Derivative;
 import smooth_d.Smooth_d;
 import outer_product.Outer_Product;
 import smooth_op.Smooth_OP;
@@ -30,7 +30,7 @@ binding cRoot implements Root
 {
 	Vio vio = {numSources=1, numSinks=3};
 	
-	Derivitive dx_dy_dt = {width=width, height=height};
+	Derivative dx_dy_dt = {width=width, height=height};
 	//just lost edge pixels w-4
 	Smooth_d smooth_t_dx = {width=width-4, height=height-4, controller_port=0};
 	Smooth_d smooth_t_dy = {width=width-4, height=height-4, controller_port=1};

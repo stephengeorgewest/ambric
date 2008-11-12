@@ -1,4 +1,4 @@
-package derivitive;
+package derivative;
 
 import astruct.pcie.Vio;
 
@@ -9,7 +9,7 @@ const boolean match_roger = true;
 
 interface RootTest{}
 
-design DerivitiveTest
+design DerivativeTest
 {
 	RootTest root;
 	options {
@@ -22,7 +22,7 @@ binding cRoot implements RootTest
 {
 	Vio vio = {numSources=1, numSinks=3};
 
-	Derivitive d = {width=width, height=height, match_roger=match_roger};
+	Derivative d = {width=width, height=height, match_roger=match_roger};
 
 	channel c0 = {vio.out[0],d.in};
 

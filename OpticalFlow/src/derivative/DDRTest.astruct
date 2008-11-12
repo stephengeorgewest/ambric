@@ -1,17 +1,8 @@
-package derivitive;
+package derivative;
 
 import astruct.io.DDR2;
 
-interface Dt_
-{
-	inbound in;
-	outbound out;
-}
-binding jDt implements Dt_
-{
-	implementation "Dt.java";
-}
-interface Dt
+interface DDRTest
 {
 	inbound in;
 	outbound out;
@@ -19,17 +10,18 @@ interface Dt
 	property int width;
 	property int height;
 }
-binding aDt_w_fifos implements Dt
+binding aDt_w_fifos implements DDRTest
 {
 	DDR2 ddr = {controller=0, port = 0, size=width*height*5};//w*h*4*5
 	DDR_Control control ={width=width, height=height};
-	Dt_ dt;
+	//Dt_ dt;
 	
 	channel c0 = {in, control.in};
-	channel c1 = {control.out,ddr.in};
-	channel c2 = {ddr.out, dt.in};
+	channel c1 = {control.out, ddr.in};
+	//attribute PortTap("ddr_control.ambricFile") on control.out;
+	channel c2 = {ddr.out, out};// dt.in};
 	//attribute PortTap("dt_in.ambricFile") on dt.in;
-	channel c3 = {dt.out, out};
+	//channel c3 = {dt.out, out};
 }
 interface DDR_Control
 {

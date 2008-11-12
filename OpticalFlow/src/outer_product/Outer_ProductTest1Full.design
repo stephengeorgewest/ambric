@@ -2,7 +2,7 @@ package outer_product;
 
 
 import astruct.pcie.Vio;
-import derivitive.Derivitive;
+import derivative.Derivative;
 import smooth_d.Smooth_d;
 import astruct.primitives.Sink;
 
@@ -27,7 +27,7 @@ binding cRoot implements RootTest
 	//Vio vio = {numSources=3, numSinks=3};
 	
 	Vio vio = {numSources=1, numSinks=3};
-	Derivitive dx_dy_dt = {width=width, height=height, match_roger = match_roger};
+	Derivative dx_dy_dt = {width=width, height=height, match_roger = match_roger};
 	Smooth_d smooth_dx = {width=width-4, height=height-4, controller_port=0, match_roger = match_roger};
 	Smooth_d smooth_dy = {width=width-4, height=height-4, controller_port=1, match_roger = match_roger};
 	Smooth_d smooth_dt = {width=width-4, height=height-4, controller_port=2, match_roger = match_roger};

@@ -1,4 +1,4 @@
-package derivitive;
+package derivative;
 
 import ajava.io.InputStream;
 import ajava.io.RawOutputStream;

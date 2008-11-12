@@ -1,4 +1,4 @@
-package derivitive;
+package derivative;
 
 import astruct.pcie.Vio;
 import astruct.primitives.Sink;

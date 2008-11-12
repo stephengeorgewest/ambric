@@ -3,7 +3,7 @@
 <stringAttribute key="com.ambric.adesigner.launcher.ddrA" value=""/>
 <stringAttribute key="com.ambric.adesigner.launcher.ddrB" value=""/>
 <booleanAttribute key="com.ambric.adesigner.launcher.debugServer" value="false"/>
-<stringAttribute key="com.ambric.adesigner.launcher.design" value="src\derivitive\DxTest.design"/>
+<stringAttribute key="com.ambric.adesigner.launcher.design" value="src\derivative\DxTest.design"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.genHalt" value="false"/>
 <stringAttribute key="com.ambric.adesigner.launcher.host" value="localhost"/>
 <intAttribute key="com.ambric.adesigner.launcher.hwBoardId" value="0"/>
@@ -18,7 +18,7 @@
 <booleanAttribute key="com.ambric.adesigner.launcher.profilingEnabled" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.profilingHw" value="false"/>
 <stringAttribute key="com.ambric.adesigner.launcher.profilingMeas" value=""/>
-<stringAttribute key="com.ambric.adesigner.launcher.project" value="Optical Flow"/>
+<stringAttribute key="com.ambric.adesigner.launcher.project" value="OpticalFlow"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressGen" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressHw" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressSim" value="false"/>

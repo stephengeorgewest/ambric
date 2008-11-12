@@ -1,4 +1,4 @@
-package derivitive;
+package derivative;
 
 import astruct.pcie.Vio;
 import astruct.primitives.Sink;
@@ -8,7 +8,7 @@ const int height = 252;
 
 interface RootTest{}
 
-design DtTest
+design DyTestTop
 {
 	RootTest root;
 	options {
@@ -22,15 +22,15 @@ binding cRoot implements RootTest
 	Vio vio = {numSources=1, numSinks=1};
 
 	D_split split = {width=width, height=height};
-	Dt dt = {width=width-4, height=height-4};
-	Sink dy;
+	Dy dy = {width=width-4, height=height};
 	Sink dx;
+	Sink dt;
 	
-	channel c0 = {vio.out[0], split.in};
-	channel ca = {split.dx, dx.in};
-	channel cb = {split.dy, dy.in};
-	channel c1 = {split.dt, dt.in};
-	channel c2 = {dt.out, vio.in[0]};
+	channel c0 = {vio.out[0],split.in};
+	channel ca = {split.dx, dx.in};//attribute Unused() on split.dx;
+	channel c1 = {split.dy, dy.in};
+	channel cb = {split.dt, dt.in};//attribute Unused() on split.dt;
+	channel c2 = {dy.out, vio.in[0]};
 	
-	//attribute PortTap("dt_out.ambricFile") on dt.out;
+	//attribute PortTap("dy_out.ambricFile") on dy.out;
 }
