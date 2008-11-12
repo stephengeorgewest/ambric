@@ -15,7 +15,7 @@
 <booleanAttribute key="com.ambric.adesigner.launcher.profilingEnabled" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.profilingHw" value="true"/>
 <stringAttribute key="com.ambric.adesigner.launcher.profilingMeas" value=""/>
-<stringAttribute key="com.ambric.adesigner.launcher.project" value="OpticalFlow"/>
+<stringAttribute key="com.ambric.adesigner.launcher.project" value="Optical Flow"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressGen" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressHw" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressSim" value="false"/>

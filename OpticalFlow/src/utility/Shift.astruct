@@ -10,5 +10,5 @@ interface Shift
 binding jShift implements Shift
 {
 	implementation "Shift.java";
-	attribute CompilerOptions (targetSR=true) on jShift;
+	//attribute CompilerOptions (targetSR=true) on jShift;
 }
