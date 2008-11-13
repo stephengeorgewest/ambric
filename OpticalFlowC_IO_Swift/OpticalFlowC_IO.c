@@ -80,19 +80,24 @@ int main(void) {
 							data[i++]=(int)ch;
 				}
 				puts("data read");
-				
+				if(width*height*frames>SWIFT_MAX_IO_WORDS)
+					puts("toobig");
 				int write_handle = swift_write_async(h,data,width*height*frames,0,0);
 				if(!(write_handle==0 | write_handle==-1))
 				{
 					int size = width_final*height_final*frames_final;
+					int frame_size= width_final*height_final;
 					int* Vx = (int *)(malloc(size*(sizeof(int))));
 					int* Vy = (int *)(malloc(size*(sizeof(int))));
 					puts("Vx,Vy malloced");
-					int read_handle_x = swift_read_async(h, Vx, size, 0, 0);
-					int read_handle_y = swift_read_async(h, Vy, size, 0, 1);
-					swift_wait_async_timeout(h, write_handle,100);
+					int read_handle_x = swift_read_async(h, Vx, frame_size, 0, 0);
+					int read_handle_y = swift_read_async(h, Vy, frame_size, 0, 1);
+					int write_size = swift_wait_async(h, write_handle);
+					printf("write done %d",write_size);
+					//swift_wait_async_timeout(h, write_handle,100);
 					swift_wait_async(h, read_handle_x);
 					swift_wait_async(h, read_handle_y);
+					puts("read done");
 					free(Vx);
 					free(Vy);
 				}
