@@ -11,9 +11,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <swift.h>
+#include <windows.h>// needed for Sleep(millisec);
 int width=316;
 int height=252;
-int frames=15;
+int frames=1;
 int frames_start=2;
 const char file_name1[] = "yos02.raw";
 char file_name_format[] = "yos%d%d.raw"; 
@@ -49,7 +50,7 @@ int main(void) {
 			int i = 0;
 			int j = 0;
 			int ch;
-			f = fopen("OpticalFlow.cfg", "r");
+			f = fopen("config.cfg", "r");
 			while ((ch = fgetc(f)) != EOF)
 				config[i++] = ch;
 			config[i] = '\0';
@@ -82,21 +83,88 @@ int main(void) {
 				puts("data read");
 				if(width*height*frames>SWIFT_MAX_IO_WORDS)
 					puts("toobig");
-				int write_handle = swift_write_async(h,data,width*height*frames,0,0);
+				int write_handle = swift_write_async(h,data,25,0,0);//width*height*frames,0,0);
 				if(!(write_handle==0 | write_handle==-1))
 				{
 					int size = width_final*height_final*frames_final;
 					int frame_size= width_final*height_final;
 					int* Vx = (int *)(malloc(size*(sizeof(int))));
 					int* Vy = (int *)(malloc(size*(sizeof(int))));
+					for(i=0; i<30;i++)
+					{
+						Vx[i]=0;
+						Vy[i]=0;
+					}
 					puts("Vx,Vy malloced");
-					int read_handle_x = swift_read_async(h, Vx, frame_size, 0, 0);
-					int read_handle_y = swift_read_async(h, Vy, frame_size, 0, 1);
+					int read_handle_x = swift_read_async(h, Vx, 25, 0, 0);
+					if(read_handle_x==0)
+						puts("broken read x");
+					int read_handle_y = swift_read_async(h, Vy, 25, 0, 1);
+					if(read_handle_y==0)
+						puts("broken read y");
+						
+						
+					int write_done = swift_check_async(h, write_handle);
+					if(write_done==-1)
+						puts(swift_get_last_error_string());
+					while(write_done==0)
+					{
+						write_done=swift_check_async(h, write_handle);
+						if(write_done==-1)
+							puts(swift_get_last_error_string());
+						printf(".");
+						Sleep(10);
+					}
 					int write_size = swift_wait_async(h, write_handle);
-					printf("write done %d",write_size);
+					
+					printf("write done %d written %d data_size\n",write_size, width*height*frames);
 					//swift_wait_async_timeout(h, write_handle,100);
-					swift_wait_async(h, read_handle_x);
-					swift_wait_async(h, read_handle_y);
+					//swift_wait_async(h, read_handle_x);
+					/*
+					int read_size = swift_wait_async_timeout(h, read_handle_x,100);
+					printf("num read %d", read_size);
+					if(read_size<0)
+						puts(swift_get_last_error_string());
+					*/
+					int read_x_done = swift_check_async(h, read_handle_x);
+					int read_y_done = swift_check_async(h, read_handle_y);
+					int num_x_read=-1;
+					int num_y_read=-1;
+					int time=0;
+					if(read_x_done==-1 | read_y_done ==-1)
+						puts(swift_get_last_error_string());
+					while(read_x_done == 0 | read_y_done ==0)
+					{
+						if(read_x_done==1&&num_x_read!=-1)
+						{
+							num_x_read = swift_wait_async(h, read_handle_x);
+							printf("Vx_done %d",num_x_read);
+						}
+						else
+							read_x_done = swift_check_async(h, read_handle_x);
+						
+						if(read_y_done==1&&num_y_read!=-1)
+						{
+							num_y_read = swift_wait_async(h, read_handle_y);
+							printf("Vy_done %d",num_y_read);
+						}
+						else
+						{
+							read_y_done = swift_check_async(h, read_handle_y);
+							
+						}
+						
+						printf(".");
+						Sleep(100);
+						time++;
+						if(time>30)
+						{
+							puts("nothing has happened");
+							break;
+						}
+					}
+					for(i=0; i<30; i++)
+						printf("in[%02d]=%03d\tadd5=%03d\tinv=%03d\n",i,data[i], Vx[i], Vy[i]);
 					puts("read done");
 					free(Vx);
 					free(Vy);
