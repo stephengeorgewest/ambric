@@ -40,7 +40,7 @@ int main(void) {
 			FILE *f;
 			int i = 0;
 			int ch;
-			f = fopen("config.cfg", "r");
+			f = fopen("Simple.cfg", "r");
 			while ((ch = fgetc(f)) != EOF)
 				config[i++] = ch;
 			config[i] = '\0';
