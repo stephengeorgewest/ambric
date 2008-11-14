@@ -13,18 +13,7 @@
 #include <swift.h>
 #include <windows.h>// needed for Sleep(millisec);
 #include <time.h>
-
-int width=316;
-int height=252;
-int frames=1;
-int frames_start=2;
-const char file_name1[] = "yos02.raw";
-char file_name_format[] = "yos%d%d.raw"; 
-char file_name[12];
-
-int width_final=300;
-int height_final=236;
-int frames_final=7;
+int data_size=25;
 int main(void) {
 	puts("Starting up\n");
 	char* ver = swift_library_version();
@@ -50,14 +39,12 @@ int main(void) {
 			puts("Config malloced");
 			FILE *f;
 			int i = 0;
-			int j = 0;
 			int ch;
-			f = fopen("OpticalFlow.cfg", "r");
+			f = fopen("config.cfg", "r");
 			while ((ch = fgetc(f)) != EOF)
 				config[i++] = ch;
 			config[i] = '\0';
 			fclose(f);
-			printf("Config %d bytes long\n",i);
 			
 			clock_t config_start_time = clock();
 			int config_val = swift_load_config(h, config, 0);
@@ -66,51 +53,33 @@ int main(void) {
 			{
 				int run_time = (config_stop_time-config_start_time)*CLOCKS_PER_SEC/1000;
 				puts("Device configured");
-				printf("\tconfig time = %dms\n\n",run_time);
+				printf("\tConfig %d bytes long\n",i);
+				printf("\tConfig time = %dms\n\n",run_time);
 				
 				FILE *data_file;
-				int* data=(int *)(malloc(width*height*frames*sizeof(int)));
-				puts("Data malloced");
-				int frames_end = frames+frames_start;
-				printf("Start Frame =%d, End Frame =%d\n",frames_start,frames_end-1);
-				i=0;
-				for(j=frames_start;j<frames_end;j++)
+				int data[data_size];
+				for(i=0;i<data_size;i++)
 				{
-					sprintf(file_name, file_name_format, j/10, j%10);
-					puts(file_name);
-					data_file=fopen(file_name, "r");
-					if(data_file==0)
-					{
-						puts("DataFile not opened");
-						return 0 ;
-					}
-					else
-						while((ch=fgetc(data_file))!= EOF)
-							data[i++]=(int)ch;
+					data[i]=i;
 				}
-				puts("Data read from file(s)");
-				if(width*height*frames>SWIFT_MAX_IO_WORDS)
-					puts("toobig");
+				if(data_size>SWIFT_MAX_IO_WORDS)
+					puts("Write is too big");
 				
 				clock_t write_start_time = clock();
-				int write_handle = swift_write_async(h,data,width*height*frames,0,0);
+				int write_handle = swift_write_async(h,data,data_size,0,0);//width*height*frames,0,0);
 				if(!(write_handle==0 | write_handle==-1))
 				{
-					int size = width_final*height_final*frames_final;
-					int frame_size= width_final*height_final;
-					int* Vx = (int *)(malloc(size*(sizeof(int))));
-					int* Vy = (int *)(malloc(size*(sizeof(int))));
-					for(i=0; i<30;i++)
+					int Add5[data_size];
+					int Inv[data_size];
+					for(i=0; i<data_size;i++)
 					{
-						Vx[i]=0;
-						Vy[i]=0;
+						Add5[i]=0;
+						Inv[i]=0;
 					}
-					puts("Vx,Vy malloced");
-					//try to read back any data
-					int read_handle_x = swift_read_async(h, Vx, 1, 0, 0);
+					int read_handle_x = swift_read_async(h, Add5, data_size, 0, 0);
 					if(read_handle_x==0)
 						puts("broken read x");
-					int read_handle_y = swift_read_async(h, Vy, 1, 0, 1);
+					int read_handle_y = swift_read_async(h, Inv, data_size, 0, 1);
 					if(read_handle_y==0)
 						puts("broken read y");
 						
@@ -130,8 +99,8 @@ int main(void) {
 					clock_t write_stop_time = clock();
 					int write_time = (write_stop_time - write_start_time)*CLOCKS_PER_SEC/1000;
 					puts("Write done");
-					printf("\t%d words written --- %d=15 frames of words\n",write_size, width*height*frames);
-					printf("%\t%dms\n",write_time);
+					printf("\t%d words written \n",write_size);
+					printf("%\tWrite time = %dms\n",write_time);
 					//swift_wait_async_timeout(h, write_handle,100);
 					//swift_wait_async(h, read_handle_x);
 					/*
@@ -152,7 +121,7 @@ int main(void) {
 						if(read_x_done==1&&num_x_read!=-1)
 						{
 							num_x_read = swift_wait_async(h, read_handle_x);
-							printf("Vx_done %d",num_x_read);
+							printf("Add5 done %d",num_x_read);
 						}
 						else
 							read_x_done = swift_check_async(h, read_handle_x);
@@ -160,7 +129,7 @@ int main(void) {
 						if(read_y_done==1&&num_y_read!=-1)
 						{
 							num_y_read = swift_wait_async(h, read_handle_y);
-							printf("Vy_done %d",num_y_read);
+							printf("Inv done %d",num_y_read);
 						}
 						else
 						{
@@ -173,15 +142,23 @@ int main(void) {
 						time++;
 						if(time>30)
 						{
-							puts("nothing has happened");
+							puts("Nothing has happened for a while. Aborting read.");
+							int ch1 = swift_channel_abort(h, 0, SWIFT_CHANNEL_READ);
+							int ch2 = swift_channel_abort(h, 1, SWIFT_CHANNEL_READ);
+							if(ch1|ch2)
+								puts(swift_get_last_error_string());
+							else
+								puts("Aborted");
 							break;
 						}
 					}
-					for(i=0; i<30; i++)
-						printf("in[%02d]=%03d\tadd5=%03d\tinv=%03d\n",i,data[i], Vx[i], Vy[i]);
-					puts("Read done, Vx,Vy freed");
-					free(Vx);
-					free(Vy);
+					puts("Read done");
+					for(i=0; i<data_size; i++)
+					{
+						if(Add5[i]!=data[i]+5 | Inv[i]!=(-data[i]))
+							printf("!error! data[%02d]=%03d\tadd5=%03d\tinv=%03d\n",i,data[i], Add5[i], Inv[i]);
+					}
+					
 				}
 				else
 				{
