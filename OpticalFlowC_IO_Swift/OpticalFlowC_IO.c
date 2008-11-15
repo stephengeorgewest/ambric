@@ -91,7 +91,6 @@ int main(void) {
 				puts("Data read from file(s)");
 				if(width*height*frames>SWIFT_MAX_IO_WORDS)
 					puts("toobig");
-				
 				clock_t write_start_time = clock();
 				int write_handle = swift_write_async(h,data,width*height*frames,0,0);
 				if(!(write_handle==0 | write_handle==-1))
@@ -173,12 +172,18 @@ int main(void) {
 						time++;
 						if(time>30)
 						{
-							puts("nothing has happened");
+							puts("Nothing has happened for a while. Aborting read.");
+							int ch1 = swift_channel_abort(h, 0, SWIFT_CHANNEL_READ);
+							int ch2 = swift_channel_abort(h, 1, SWIFT_CHANNEL_READ);
+							if(ch1|ch2)
+								puts(swift_get_last_error_string());
+							else
+								puts("Aborted");
 							break;
 						}
 					}
 					for(i=0; i<30; i++)
-						printf("in[%02d]=%03d\tadd5=%03d\tinv=%03d\n",i,data[i], Vx[i], Vy[i]);
+						printf("in[%02d]=%03d\tVx=%03d\tVy=%03d\n",i,data[i], Vx[i], Vy[i]);
 					puts("Read done, Vx,Vy freed");
 					free(Vx);
 					free(Vy);

@@ -13,7 +13,7 @@
 #include <swift.h>
 #include <windows.h>// needed for Sleep(millisec);
 #include <time.h>
-int data_size=25;
+int data_size=130;
 int main(void) {
 	puts("Starting up\n");
 	char* ver = swift_library_version();
@@ -56,17 +56,16 @@ int main(void) {
 				printf("\tConfig %d bytes long\n",i);
 				printf("\tConfig time = %dms\n\n",run_time);
 				
-				FILE *data_file;
 				int data[data_size];
 				for(i=0;i<data_size;i++)
 				{
-					data[i]=i;
+					data[i]=i+10;
 				}
 				if(data_size>SWIFT_MAX_IO_WORDS)
 					puts("Write is too big");
 				
 				clock_t write_start_time = clock();
-				int write_handle = swift_write_async(h,data,data_size,0,0);//width*height*frames,0,0);
+				int write_handle = swift_write_async(h,data,data_size,0,0);
 				if(!(write_handle==0 | write_handle==-1))
 				{
 					int Add5[data_size];
@@ -93,7 +92,7 @@ int main(void) {
 						if(write_done==-1)
 							puts(swift_get_last_error_string());
 						printf(".");
-						Sleep(10);
+						 Sleep(10);
 					}
 					int write_size = swift_wait_async(h, write_handle);
 					clock_t write_stop_time = clock();
