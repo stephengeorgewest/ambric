@@ -14,6 +14,9 @@
 #include <windows.h>// needed for Sleep(millisec);
 #include <time.h>
 
+int * read_data_files();
+int config_dev(swift_handle h ,char * str);
+
 int width=316;
 int height=252;
 int frames=1;
@@ -40,55 +43,16 @@ int main(void) {
 	{
 		puts("Opened first pcie device\n");
 		
-		
 		int reset_val = swift_reset(h);
 		if(reset_val==0)
 		{
 			puts("Device reset\n");
 			
-			char* config=(char*)(malloc(1024*1024*16*sizeof(char)));//[1024*1024*16]; // Up to 16 Megabyte configuration file
-			puts("Config malloced");
-			FILE *f;
-			int i = 0;
-			int j = 0;
-			int ch;
-			f = fopen("OpticalFlow.cfg", "r");
-			while ((ch = fgetc(f)) != EOF)
-				config[i++] = ch;
-			config[i] = '\0';
-			fclose(f);
-			printf("Config %d bytes long\n",i);
-			
-			clock_t config_start_time = clock();
-			int config_val = swift_load_config(h, config, 0);
-			clock_t config_stop_time = clock();
+			int config_val = config_dev(h, "OpticalFlow.cfg");
 			if(config_val==0)
 			{
-				int run_time = (config_stop_time-config_start_time)*CLOCKS_PER_SEC/1000;
-				puts("Device configured");
-				printf("\tconfig time = %dms\n\n",run_time);
 				
-				FILE *data_file;
-				int* data=(int *)(malloc(width*height*frames*sizeof(int)));
-				puts("Data malloced");
-				int frames_end = frames+frames_start;
-				printf("Start Frame =%d, End Frame =%d\n",frames_start,frames_end-1);
-				i=0;
-				for(j=frames_start;j<frames_end;j++)
-				{
-					sprintf(file_name, file_name_format, j/10, j%10);
-					puts(file_name);
-					data_file=fopen(file_name, "r");
-					if(data_file==0)
-					{
-						puts("DataFile not opened");
-						return 0 ;
-					}
-					else
-						while((ch=fgetc(data_file))!= EOF)
-							data[i++]=(int)ch;
-				}
-				puts("Data read from file(s)");
+				int * data = read_data_files();// don't forget to free
 				if(width*height*frames>SWIFT_MAX_IO_WORDS)
 					puts("toobig");
 				clock_t write_start_time = clock();
@@ -99,6 +63,7 @@ int main(void) {
 					int frame_size= width_final*height_final;
 					int* Vx = (int *)(malloc(size*(sizeof(int))));
 					int* Vy = (int *)(malloc(size*(sizeof(int))));
+					int i;
 					for(i=0; i<30;i++)
 					{
 						Vx[i]=0;
@@ -166,7 +131,28 @@ int main(void) {
 							read_y_done = swift_check_async(h, read_handle_y);
 							
 						}
-						
+						write_start_time = clock();
+						write_handle = swift_write_async(h,data,width*height,0,0);
+						if(!(write_handle==0 | write_handle==-1))
+						{
+							write_done = swift_check_async(h, write_handle);
+							if(write_done==-1)
+								puts(swift_get_last_error_string());
+							while(write_done==0)
+							{
+								write_done=swift_check_async(h, write_handle);
+								if(write_done==-1)
+									puts(swift_get_last_error_string());
+								printf(".");
+								Sleep(10);
+							}
+							write_size = swift_wait_async(h, write_handle);
+							write_stop_time = clock();
+							write_time = (write_stop_time - write_start_time)*CLOCKS_PER_SEC/1000;
+							puts("Write done");
+							printf("\t%d words written --- %d=15 frames of words\n",write_size, width*height*frames);
+							printf("%\t%dms\n",write_time);
+						}
 						printf(".");
 						Sleep(100);
 						time++;
@@ -196,13 +182,6 @@ int main(void) {
 				free(data);
 				puts("Data freed");
 			}
-			else
-			{
-				puts("Configuration failed");
-				puts(swift_get_last_error_string());
-			}
-			free(config);
-			puts("Config freed");
 		}
 		else
 		{
@@ -225,4 +204,69 @@ int main(void) {
 	}
 	puts("\nIt's over!");
 	return EXIT_SUCCESS;
+}
+
+int config_dev(swift_handle h, char * str)
+{
+	char* config=(char*)(malloc(1024*1024*16*sizeof(char)));//[1024*1024*16]; // Up to 16 Megabyte configuration file
+	puts("Config malloced");
+	FILE *f;
+	int i = 0;
+	int j = 0;
+	int ch;
+	f = fopen(str, "r");
+	while ((ch = fgetc(f)) != EOF)
+		config[i++] = ch;
+	config[i] = '\0';
+	fclose(f);
+	printf("Config %d bytes long\n",i);
+	
+	clock_t config_start_time = clock();
+	int config_val = swift_load_config(h, config, 0);
+	clock_t config_stop_time = clock();	
+	free(config);
+	puts("config freed");
+	if(config_val==0)
+	{
+		int run_time = (config_stop_time-config_start_time)*CLOCKS_PER_SEC/1000;
+		puts("Device configured");
+		printf("\tconfig time = %dms\n\n",run_time);
+	}
+	else
+	{
+		puts("Configuration failed");
+		puts(swift_get_last_error_string());
+	}
+	return config_val;
+}
+
+
+int * read_data_files()
+{
+	FILE *data_file;
+	int* data=(int *)(malloc(width*height*frames*sizeof(int)));
+	puts("Data malloced");
+	
+	int frames_end = frames+frames_start;
+	printf("Start Frame =%d, End Frame =%d\n",frames_start,frames_end-1);
+	
+	int i=0,j=0;
+	char ch;
+	
+	for(j=frames_start;j<frames_end;j++)
+	{
+		sprintf(file_name, file_name_format, j/10, j%10);
+		puts(file_name);
+		data_file=fopen(file_name, "r");
+		if(data_file==0)
+		{
+			puts("DataFile not opened");
+			return 0 ;
+		}
+		else
+			while((ch=fgetc(data_file))!= EOF)
+				data[i++]=(int)ch;
+	}
+	puts("Data read from file(s)");
+	return data;
 }
