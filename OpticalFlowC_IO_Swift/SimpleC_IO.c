@@ -16,8 +16,9 @@
 int data_size=130;
 int main(void) {
 	puts("Starting up\n");
-	char* ver = swift_library_version();
-	printf("Using library version %s\n",ver);
+	char* lib_ver = swift_library_version();
+	printf("Using library version %s\n",lib_ver);
+	//printf("\t%s\n",swift_lib_version_number());
 	//int swift_device_count(int trans_type);
 	int count = swift_device_count(SWIFT_PCIE);
 	printf("%d pcie devices found\n",count);
@@ -27,6 +28,10 @@ int main(void) {
 	swift_handle h = swift_open(SWIFT_PCIE, 0,0);
 	if(h!=0)
 	{
+		printf("Using Driver Version %s\n",swift_driver_version(h));
+		int driver_ver[4];
+		swift_driver_version_number(h,&driver_ver[0],&driver_ver[1],&driver_ver[2],&driver_ver[3]);
+		printf("\tmajor-%d, minor-%d, rev-%d, build-%d\n",driver_ver[0],driver_ver[1],driver_ver[2],driver_ver[3] );
 		puts("Opened first pcie device\n");
 		
 		
