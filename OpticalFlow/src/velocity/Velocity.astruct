@@ -131,6 +131,7 @@ binding aVelocityOpt implements Velocity when (optmimize==true)
 		}
 		
 		channel cv21 = {k1.K, v2.k};
+		attribute MinimumBuffer(50) on k1.K;
 		channel cv22 = {xx_split.out_3, v2.xx};
 		channel cv23 = {xy_split.out_3, v2.xy};
 		channel cv24 = {xt_split.out_3, v2.xt};
