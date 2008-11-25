@@ -242,7 +242,7 @@ int config_dev(swift_handle h, char * str)
 int * read_data_files()
 {
 	FILE *data_file;
-	int* data=(int *)(malloc(width*height*frames*sizeof(int)));
+	int* data=(int *)(malloc(width*height*frames*sizeof(int)+1*sizeof(int)));
 	puts("Data malloced");
 	
 	int frames_end = frames+frames_start;
@@ -250,7 +250,7 @@ int * read_data_files()
 	
 	int i=0,j=0;
 	char ch;
-	
+	data[i++]=-1;//first element negative number!! Why? It makes it work!
 	for(j=frames_start;j<frames_end;j++)
 	{
 		sprintf(file_name, file_name_format, j/10, j%10);

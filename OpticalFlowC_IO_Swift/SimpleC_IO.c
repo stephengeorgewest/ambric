@@ -13,7 +13,7 @@
 #include <swift.h>
 #include <windows.h>// needed for Sleep(millisec);
 #include <time.h>
-int data_size=150;
+int data_size=1000;
 int main(int argc, char *argv[])
 {
 	/*puts("Starting up\n");*/
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 				printf("\tConfig time = %dms\n\n",run_time);
 				*/
 				int data[data_size];
-				data[0]=add_val;
+				data[0]=-add_val;
 				//data[1]=add_val;
 				for(i=1;i<data_size;i++)
 				{
