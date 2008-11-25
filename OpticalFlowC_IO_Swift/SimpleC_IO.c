@@ -18,6 +18,11 @@ int main(int argc, char *argv[])
 {
 	/*puts("Starting up\n");*/
 	//puts(argv[0]);
+	if(argc==1)
+	{
+		puts("Needs a single number < 10");
+		return -1;
+	}
 	int add_val=(int)argv[1][0]-48;
 	//printf("val %d", add_val);
 	char* lib_ver = swift_library_version();
