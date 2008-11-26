@@ -57,7 +57,7 @@ int main(void) {
 					puts("toobig");
 				clock_t write_start_time = clock();
 				clock_t write_stop_time; 
-				clock_t read_stop_time;
+				clock_t read_stop_time=0;
 				int write_handle = swift_write_async(h,data,width*height*frames,0,SWIFT_CHANNEL0);
 				if(!(write_handle==0 | write_handle==-1))
 				{
@@ -79,9 +79,6 @@ int main(void) {
 					int read_handle_y = swift_read_async(h, Vy, width_final*height_final*frames_final, 0, SWIFT_CHANNEL1);
 					if(read_handle_y==0)
 						puts("broken read y");
-					int write_extra_handle=0;
-					int write_extra_done=0;
-					int write_extra_data=0;
 					int write_size=-1;
 					int write_done  = swift_check_async(h, write_handle);
 					int read_x_done = swift_check_async(h, read_handle_x);
@@ -93,29 +90,17 @@ int main(void) {
 						puts(swift_get_last_error_string());
 					while(num_x_read==-1 || num_y_read==-1 || read_x_done == 0 || read_y_done ==0)
 					{
+						printf(".");
 						if(write_done==0)
 							write_done = swift_check_async(h, write_handle);
 						else if(write_size==-1)
 						{
 							write_size = swift_wait_async(h, write_handle);
 							write_stop_time = clock();
-							int write_time = (write_stop_time - write_start_time)*CLOCKS_PER_SEC/1000;
-							puts("Write done");
+							int write_time = (write_stop_time - write_start_time);///(CLOCKS_PER_SEC/1000);
+							puts("\nWrite done");
 							printf("\t%d words written --- %d=oneFrame --- %d=15 frames of words\n",write_size,width*height, width*height*frames);
 							printf("%\t%dms\n",write_time);
-						}
-						else
-						{
-							if(write_extra_handle==0)
-								write_extra_handle=swift_write_async(h, data, 1, 0, SWIFT_CHANNEL0);
-							else if(write_extra_done==0)
-								write_extra_done=swift_check_async(h, write_extra_handle);
-							else
-							{
-								write_extra_data=write_extra_data+swift_wait_async(h, write_extra_handle);
-								write_extra_done=0;
-								write_extra_handle=0;
-							}
 						}
 						
 						if(read_x_done==0)
@@ -123,7 +108,7 @@ int main(void) {
 						else if(num_x_read==-1)
 						{
 							num_x_read = swift_wait_async(h, read_handle_x);
-							printf("Vx_done %d",num_x_read);
+							printf("Vx_done %d\n",num_x_read);
 							read_stop_time=clock();
 						}
 						
@@ -132,7 +117,7 @@ int main(void) {
 						else if(num_y_read==-1)
 						{
 							num_y_read = swift_wait_async(h, read_handle_y);
-							printf("Vy_done %d",num_y_read);
+							printf("Vy_done %d\n",num_y_read);
 							read_stop_time=clock();
 						}
 						else
@@ -150,7 +135,6 @@ int main(void) {
 							break;
 						}
 						
-						printf(".");
 						Sleep(10);
 						time++;//every second
 						if(time>1*60*100)//stop after 3 min
@@ -165,9 +149,13 @@ int main(void) {
 							break;
 						}
 					}
-					printf("\nextra_data_in=%d\n",write_extra_data);
+					if(read_stop_time>0)
+						printf("read_time = %dms\n",(read_stop_time-write_start_time)/(CLOCKS_PER_SEC/1000));
 					for(i=0; i<30; i++)
 						printf("in[%02d]=%03d\tVx=%03d\tVy=%03d\n",i,data[i], Vx[i], Vy[i]);
+					for(i=0;i<width_final*height_final*frames_final;i++)
+						if(Vy[i]!=0)
+							puts("data!");
 					puts("Read done, Vx,Vy freed");
 					free(Vx);
 					free(Vy);

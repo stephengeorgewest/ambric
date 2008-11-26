@@ -99,7 +99,7 @@ int main(void) {
 						printf("Vy_done %d",num_y_read);
 						read_stop_time=clock();
 					}
-					else
+					//else
 				
 					//abort and break on error
 					if(read_x_done==-1||read_y_done==-1)
