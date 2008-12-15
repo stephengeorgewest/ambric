@@ -1,0 +1,13 @@
+package utility;
+
+interface Counter
+{
+	inbound in;
+	outbound out;
+	
+	property int stop=100;
+}
+binding jCounter implements Counter
+{
+	implementation "Counter.java";	
+}

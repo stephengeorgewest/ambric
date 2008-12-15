@@ -1,0 +1,21 @@
+package Zeroed;
+
+import astruct.primitives.DupFork;
+interface OpticalFlowIO_only
+{
+	inbound in;
+	outbound Vx;
+	outbound Vy;
+	
+	property int width;
+	property int height;
+}
+binding aOpticalFlow implements OpticalFlowIO_only
+{
+	DupFork s = { mode = ForkMode.SR };
+	channel c0 = {in,s.in};
+	
+	channel c19 = {s.left, Vx};
+	channel c20 = {s.right, Vy};
+
+}

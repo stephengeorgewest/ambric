@@ -1,6 +1,10 @@
 package derivative;
 
 //import astruct.primitives.Fifo;
+import astruct.primitives.Sink;
+import astruct.primitives.Source;
+import astruct.primitives.DupFork;
+
 import utility.Shift_and_Saturate;
 import utility.Shift_Saturate;
 import utility.Saturate;
@@ -19,16 +23,17 @@ interface Derivative
 }
 binding aDerivitive implements Derivative
 {
-	D_split split = {width=width, height=height};//only feeds the pixels that each kernel needs
-	DDR_delay dx_delay = {width=width, height=height-4, offset=(width-4)*(height-4)*5, port =1};
-	Dx dx = {width=width};//this is not fed top or bottom pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
-	DDR_delay dy_delay = {width=width-4, height=height, offset=(width-4)*(height-4)*5+3*width*(height-4), port =2};// past the dt frames and the dx frames
-	Dy dy = {width=width-4, height=height};//this is not fed left or right pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
-	Dt dt = {width=width-4, height=height-4};// not fed border pixels  // they are ignored to keep the 3 blocks symmetric
 	void generate()
 	{
-		if(match_roger)
+		if(false)//match_roger)
 		{
+			D_split split = {width=width, height=height};//only feeds the pixels that each kernel needs
+			DDR_delay dx_delay = {width=width, height=height-4, offset=(width-4)*(height-4)*5, port =1};
+			Dx dx = {width=width};//this is not fed top or bottom pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
+			DDR_delay dy_delay = {width=width-4, height=height, offset=(width-4)*(height-4)*5+3*width*(height-4), port =2};// past the dt frames and the dx frames
+			Dy dy = {width=width-4, height=height};//this is not fed left or right pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
+			Dt dt = {width=width-4, height=height-4};// not fed border pixels  // they are ignored to keep the 3 blocks symmetric
+		
 			/*
 			Shift_and_Saturate ssx = { shift_by = 3, max = 127, min = -128 };
 			Shift_and_Saturate ssy = { shift_by = 3, max = 127, min = -128 };
@@ -61,24 +66,40 @@ binding aDerivitive implements Derivative
 			channel ct0 = {split.dt, dt.in};
 			channel ct1 = {dt.out, sst.in};
 			channel ct2 = {sst.out, dt_out};
+
+			attribute MinimumBuffer(4*width) on dx.out;
+			attribute MinimumBuffer(4*width) on dt.out;
 		}
 		else
 		{
-			channel c0 = {in, split.in};
+			//DupFork f;
+			//Sink xSink;
 			
-			channel cx0 = {split.dx, dx_delay.in};
-			channel cxa = {dx_delay.out, dx.in};
-			channel cx1 = {dx.out,dx_out};
+			D_split split = {width=width, height=height};//only feeds the pixels that each kernel needs$
+			//DDR_delay dx_delay = {width=width, height=height-4, offset=(width-4)*(height-4)*5, port =1};
+			//Dx dx = {width=width};//this is not fed top or bottom pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
+			//DDR_delay dy_delay = {width=width-4, height=height, offset=(width-4)*(height-4)*5+3*width*(height-4), port =2};// past the dt frames and the dx frames
+			//Dy dy = {width=width-4, height=height};//this is not fed left or right pixels or first 2 frames  // they are ignored to keep the 3 blocks symmetric
+			//Dt dt = {width=width-4, height=height-4};// not fed border pixels  // they are ignored to keep the 3 blocks symmetric
+		
+			channel c0 = {in, split.in};//f.in};
+			//channel cfl = {f.left, split.in};
+			///channel cfr = {f.right, dx_out};
+			//channel cx0 = {split.dx, xSink.in};//dx_out};// dx_delay.in};
+			channel cx0 = {split.dx, dx_out};// dx_delay.in};
+			//channel cxa = {dx_delay.out, dx.in};
+			//channel cx1 = {dx.out,dx_out};
 			
-			channel cy0 = {split.dy, dy_delay.in};
-			channel cya = {dy_delay.out, dy.in};
-			channel cy1 = {dy.out, dy_out};
+			channel cy0 = {split.dy, dy_out};//dx.in};// dy_delay.in};
+			//channel cya = {dy_delay.out, dy.in};
+			//channel cy1 = {dy.out,
+			//channel cy1 ={dx.out, dy_out};
 			
-			channel ct0 = {split.dt, dt.in};
-			channel ct1 = {dt.out, dt_out};
+			channel ct0 = {split.dt, dt_out};// dt.in};
+			//channel ct1 = {dt.out, dt_out};
+		//attribute MinimumBuffer(4*width) on dx.out;
+		//attribute MinimumBuffer(4*width) on dt.out;
 		}
-		attribute MinimumBuffer(4*width) on dx.out;
-		attribute MinimumBuffer(4*width) on dt.out;
 	}
 	
 }

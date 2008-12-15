@@ -3,7 +3,7 @@
 <stringAttribute key="com.ambric.adesigner.launcher.ddrA" value=""/>
 <stringAttribute key="com.ambric.adesigner.launcher.ddrB" value=""/>
 <booleanAttribute key="com.ambric.adesigner.launcher.debugServer" value="false"/>
-<stringAttribute key="com.ambric.adesigner.launcher.design" value="src/derivative/DerivativeTest.design"/>
+<stringAttribute key="com.ambric.adesigner.launcher.design" value="src\opticalFlowTop\OpticalFlowCycleCountTop.design"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.genHalt" value="false"/>
 <stringAttribute key="com.ambric.adesigner.launcher.host" value="localhost"/>
 <intAttribute key="com.ambric.adesigner.launcher.hwBoardId" value="0"/>
@@ -11,21 +11,15 @@
 <booleanAttribute key="com.ambric.adesigner.launcher.hwHalt" value="true"/>
 <mapAttribute key="com.ambric.adesigner.launcher.iofiles">
 <mapEntry key="0,Stimulus" value="Input\Yos316x252x15.ambricFile"/>
-<mapEntry key="0,Capture" value="Output\Derivative\Dx_output312x248x10.ambricFile"/>
-<mapEntry key="1,Capture" value="Output\Derivative\Dy_output312x248x10.ambricFile"/>
-<mapEntry key="2,Capture" value="Output\Derivative\Dt_output312x248x10.ambricFile"/>
+<mapEntry key="0,Capture" value="Output\New Text Document.txt"/>
 </mapAttribute>
 <intAttribute key="com.ambric.adesigner.launcher.port" value="1697"/>
 <stringAttribute key="com.ambric.adesigner.launcher.profilingCapture" value=""/>
-<booleanAttribute key="com.ambric.adesigner.launcher.profilingEnabled" value="false"/>
-<booleanAttribute key="com.ambric.adesigner.launcher.profilingHw" value="true"/>
-<stringAttribute key="com.ambric.adesigner.launcher.profilingMeas" value=""/>
 <stringAttribute key="com.ambric.adesigner.launcher.project" value="OpticalFlow"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressGen" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressHw" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.regressSim" value="false"/>
 <booleanAttribute key="com.ambric.adesigner.launcher.simHalt" value="false"/>
-<intAttribute key="com.ambric.adesigner.launcher.simJavaIss" value="2"/>
-<intAttribute key="com.ambric.adesigner.launcher.type" value="0"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="{0}"/>
+<intAttribute key="com.ambric.adesigner.launcher.simJavaIss" value="0"/>
+<intAttribute key="com.ambric.adesigner.launcher.type" value="2"/>
 </launchConfiguration>

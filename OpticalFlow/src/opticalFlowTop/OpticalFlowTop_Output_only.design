@@ -1,7 +1,7 @@
 package opticalFlowTop;
 
 import astruct.pcie.Vio;
-
+import utility.Source_range;
 
 
 const int width = 316;
@@ -9,23 +9,23 @@ const int height = 252;
 
 interface Root{}
 
-design OpticalFlowTop
+design OpticalFlowTop_Output_only
 {
 	Root root;
 	options {
 //		architecture = Architecture.AM2045,
 		image=Image.PCIE,
-		System.mergeTextAndData = true
+		board=Board.IDB
 	} on root;
 }
 binding cRoot implements Root
 {
-	Vio vio = {numSources=1, numSinks=2};
-	
+	Vio vio = {numSources=0, numSinks=2};
+	Source_range source= { start = 0, stop = 256 };
 	OpticalFlow opticalflow={width=width, height=height};
 	
-	channel c0 = {vio.out[0],opticalflow.in};
+	channel c0 = {source.out, opticalflow.in};
 	
-	channel c21 = {opticalflow.Vx, vio.in[0]};//Vx_sink.in};
-	channel c22 = {opticalflow.Vy, vio.in[1]};//Vy_sink.in};
+	channel c21 = {opticalflow.Vx, vio.in[0]};
+	channel c22 = {opticalflow.Vy, vio.in[1]};
 }

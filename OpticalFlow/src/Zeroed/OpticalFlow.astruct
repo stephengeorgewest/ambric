@@ -1,6 +1,6 @@
 package Zeroed;
 
-import derivitive.Derivitive;
+import derivative.Derivative;
 import smooth_d.Smooth_d;
 import outer_product.Outer_Product;
 import smooth_op.Smooth_OP;
@@ -19,7 +19,7 @@ interface OpticalFlow
 }
 binding aOpticalFlow implements OpticalFlow
 {
-	Derivitive dx_dy_dt = {width=width, height=height, match_roger=match_roger};
+	Derivative dx_dy_dt = {width=width, height=height, match_roger=match_roger};
 	//just lost edge pixels w-4
 	Smooth_d smooth_t_dx = {width=width-4, height=height-4, controller_port=0, match_roger=match_roger};
 	Smooth_d smooth_t_dy = {width=width-4, height=height-4, controller_port=1, match_roger=match_roger};

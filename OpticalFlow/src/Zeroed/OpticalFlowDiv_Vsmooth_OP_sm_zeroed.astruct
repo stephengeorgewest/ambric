@@ -1,12 +1,13 @@
 package Zeroed;
 
-import derivitive.Derivitive;
+import derivative.Derivative;
 import smooth_d.Smooth_d;
 import outer_product.Outer_Product;
 //import smooth_op.Smooth_OP;
-import velocity.Velocity;
+//import velocity.Velocity;
 //import smooth_v.Smooth_V;
 
+import utility.Six_in_Two_out;
 const boolean match_roger = true;
 interface OpticalFlowDiv_Vsmooth_OP_sm_zeroed
 {
@@ -19,7 +20,7 @@ interface OpticalFlowDiv_Vsmooth_OP_sm_zeroed
 }
 binding aOpticalFlow implements OpticalFlowDiv_Vsmooth_OP_sm_zeroed
 {
-	Derivitive dx_dy_dt = {width=width, height=height, match_roger=match_roger};
+	Derivative dx_dy_dt = {width=width, height=height, match_roger=match_roger};
 	//just lost edge pixels w-4
 	Smooth_d smooth_t_dx = {width=width-4, height=height-4, controller_port=0, match_roger=match_roger};
 	Smooth_d smooth_t_dy = {width=width-4, height=height-4, controller_port=1, match_roger=match_roger};
@@ -33,7 +34,7 @@ binding aOpticalFlow implements OpticalFlowDiv_Vsmooth_OP_sm_zeroed
 	Smooth_OP smooth_op_g_yt={width=width-8, height=height-8, match_roger=match_roger};
 	Smooth_OP smooth_op_g_tt={width=width-8, height=height-8, match_roger=match_roger};
 	*///lost some more now width-10,height-10
-	Velocity velocity = { match_roger = match_roger};
+	Six_in_Two_out velocity;
 	//Smooth_V smooth_v_x={width=width-10, height=height-10};
 	//Smooth_V smooth_v_y={width=width-10, height=height-10};
 	//final should be width=16 height-16
@@ -45,14 +46,14 @@ binding aOpticalFlow implements OpticalFlowDiv_Vsmooth_OP_sm_zeroed
 	channel c5 = {smooth_t_dy.out, outer_product.dy_smooth};
 	channel c6 = {smooth_t_dt.out, outer_product.dt_smooth};
 	
-	channel c7 = {outer_product.g_xx, velocity.g_xx_smooth};
-	channel c8 = {outer_product.g_xy, velocity.g_xy_smooth};
-	channel c9 = {outer_product.g_xt, velocity.g_xt_smooth};
-	channel c10 = {outer_product.g_yy, velocity.g_yt_smooth};
-	channel c11 = {outer_product.g_yt, velocity.g_yy_smooth};
-	channel c12 = {outer_product.g_tt, velocity.g_tt_smooth};
+	channel c7 = {outer_product.g_xx, velocity.in_1};
+	channel c8 = {outer_product.g_xy, velocity.in_2};
+	channel c9 = {outer_product.g_xt, velocity.in_3};
+	channel c10 = {outer_product.g_yy, velocity.in_4};
+	channel c11 = {outer_product.g_yt, velocity.in_5};
+	channel c12 = {outer_product.g_tt, velocity.in_6};
 	
-	channel c19 = {velocity.Vx, Vx};
-	channel c20 = {velocity.Vy, Vy};
+	channel c19 = {velocity.out_1, Vx};
+	channel c20 = {velocity.out_2, Vy};
 
 }

@@ -1,0 +1,12 @@
+package utility;
+
+interface CycleCount
+{
+	inbound in;
+	outbound out;
+}
+
+binding sCycleCount implements CycleCount
+{
+	implementation "CycleCount.s";	
+}

@@ -18,13 +18,13 @@ design D_splitTest
 }
 binding cRoot implements RootTest
 {
-	Vio vio = {numSources=0, numSinks=3};
+	Vio vio = {numSources=1, numSinks=3};
 	
-	source_x_y_t source = {width=width, height=height};
+	//source_x_y_t source = {width=width, height=height};
 
 	D_split split = {width=width, height=height};
 
-	channel c0 = {source.out, split.in};
+	channel c0 = {vio.out[0], split.in};
 	channel c1 = {split.dx, vio.in[0]};
 	channel c2 = {split.dy, vio.in[1]};
 	channel c3 = {split.dt, vio.in[2]};

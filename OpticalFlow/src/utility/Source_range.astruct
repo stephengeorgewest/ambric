@@ -1,0 +1,13 @@
+package utility;
+
+interface Source_range
+{
+	outbound out;
+	
+	property int start;
+	property int stop;
+}
+binding jSource_range implements Source_range
+{
+	implementation "Source_range.java";
+}
