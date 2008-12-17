@@ -30,10 +30,11 @@ k_star_0:
 	inns in // Try a read from in
 	brio BRIO_TAKEN // Branch if inns succeeded
 	add_i r2, 1, r2 // Delay slot instruction always executed
-	jump k_star_0// Not executed if branch taken
+	jump code_ptr(k_star_0)// Not executed if branch taken
+	nop
 BRIO_TAKEN:
 	mov prev, sink, out, de0;write out the values
-	mov r2, sink, out, de0
+	mov r2, sink, out, de0;write the loop count
 	jump code_ptr(k_init);start over
 	nop
 k_halt:
