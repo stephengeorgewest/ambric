@@ -27,9 +27,10 @@ k_star_0:
 	;code here
 	;call code_ptr(_run)
 	
+	add_i r2, 1, r2 // Delay slot instruction always executed
 	inns in // Try a read from in
 	brio BRIO_TAKEN // Branch if inns succeeded
-	add_i r2, 1, r2 // Delay slot instruction always executed
+	nop
 	jump code_ptr(k_star_0)// Not executed if branch taken
 	nop
 BRIO_TAKEN:
