@@ -13,9 +13,12 @@ public class Counter
 	}
 	public void run(InputStream<Integer> in, OutputStream<Integer> out)
 	{
-		count++;
+		this.count++;
 		in.readInt();
-		if(count==this.stop)
-			out.writeInt(count);
+		if(this.count==this.stop)
+		{
+			out.writeInt(this.count);
+			this.count=0;
+		}
 	}
 }

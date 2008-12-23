@@ -1,0 +1,27 @@
+package utility;
+
+import astruct.pcie.Vio;
+import astruct.primitives.Source;
+import astruct.primitives.Sink;
+
+interface Root{}
+
+design CycleCountDesign
+{
+	Root root;
+	options {
+//		architecture = Architecture.AM2045,
+		image=Image.PCIE,
+		board=Board.IDB
+	} on root;
+}
+binding cRoot implements Root
+{
+	Vio vio = {numSources=0, numSinks=0};
+	Source so;
+	Sink si;
+	CycleCount c;
+	
+	channel c0 = {so.out, c.in};
+	channel c1 = {c.out, si.in};
+}
