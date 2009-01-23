@@ -3,9 +3,9 @@ package derivative;
 import astruct.pcie.Vio;
 
 
-const int width = 256;//316;
-const int height = 2;//252;
-const boolean match_roger = false	;
+const int width = 316;//problems with swift caused by to big something here
+const int height = 252;
+const boolean match_roger = true	;
 
 interface RootTest{}
 
@@ -22,12 +22,12 @@ binding cRoot implements RootTest
 {
 	Vio vio = {numSources=1, numSinks=3, doDataExtent=false};
 
-	//Derivative d = {width=width, height=height, match_roger=match_roger};
-	D_split d = {width=width, height=height};
+	Derivative d = {width=width, height=height, match_roger=match_roger};
+	//D_split d = {width=width, height=height};
 	channel c0 = {vio.out[0],d.in};
 
-	channel ca = {d.dx, vio.in[0]};
-	channel cb = {d.dy, vio.in[1]};
-	channel cc = {d.dt, vio.in[2]};
+	channel ca = {d.dx_out, vio.in[0]};
+	channel cb = {d.dy_out, vio.in[1]};
+	channel cc = {d.dt_out, vio.in[2]};
 
 }

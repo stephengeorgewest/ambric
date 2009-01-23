@@ -1,14 +1,18 @@
 package opticalFlowTop;
 
 import astruct.pcie.Vio;
-import astruct.primitives.Sink;
-import utility.Source_range;
 import utility.Counter;
 import utility.CycleCount;
+import utility.Source_range;
+//import astruct.primitives.Source;
+import astruct.primitives.Sink;
 
+//import astruct.debug_master.DebugMaster;
+//import astruct.pcie.Vio;
 
-const int width = 316;
-const int height = 252;
+const int width = 320;
+const int height = 240;
+
 
 interface Root{}
 
@@ -18,24 +22,28 @@ design OpticalFlowTop
 	options {
 //		architecture = Architecture.AM2045,
 		image=Image.PCIE,
-		System.mergeTextAndData = true
+		board=Board.IDB
 	} on root;
 }
 binding cRoot implements Root
 {
 	Vio vio = {numSources=1, numSinks=1};
-	Sink Vx_sink;
-	Sink InputSink;
-	Source_range source={start=0, stop=255};
-	OpticalFlow opticalflow={width=width, height=height};
-	Counter count={stop=1000};
-	CycleCount cycles;
-	channel c0 = {vio.out[0],InputSink.in};
+	//DebugMaster dm={transport=IOTransport.USB};
 	
-	channel c1 = {source.out, opticalflow.in};
+	Source_range source = {start=0, stop=255};
+	Sink inputsink;
+	Sink Vx_sink;
+	
+	OpticalFlow opticalflow={width=width, height=height};
+	Counter OutCount={stop=5000};
+	CycleCount c;
+	
+	channel c0 = {source.out,opticalflow.in};
+	//channel c0 = {vio.out[0],opticalflow.in};
+	channel c1 = {vio.out[0], inputsink.in};
 	
 	channel c21 = {opticalflow.Vx, Vx_sink.in};
-	channel c22 = {opticalflow.Vy, count.in};
-	channel c23 = {count.out, cycles.in};
-	channel c24 = {cycles.out, vio.in[0]};
-}
+	channel c22 = {opticalflow.Vy, OutCount.in};
+			channel c23 = {OutCount.out, c.in};
+			channel c24 = {c.out, vio.in[0]};//Vy_sink.in};
+}	
