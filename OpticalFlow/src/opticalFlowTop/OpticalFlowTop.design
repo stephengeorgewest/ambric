@@ -14,8 +14,8 @@ design OpticalFlowTop
 	Root root;
 	options {
 //		architecture = Architecture.AM2045,
-		image=Image.PCIE,
-		System.mergeTextAndData = true
+		//System.mergeTextAndData = true,
+		image=Image.PCIE
 	} on root;
 }
 binding cRoot implements Root
