@@ -91,7 +91,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 		add("South", panel);
 		try
 		{
-			//bi = ImageIO.read(new File("./lena512.bmp"));
+			bi = ImageIO.read(new File("./lena512.bmp"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/fsa-green1280.jpg"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/fsa-blue1280.jpg"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/fsa-red1280.jpg"));
@@ -103,7 +103,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/box.bmp"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/sff1sca1.gif"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/horizontal_line32x32.bmp"));
-			bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/triangle512x512.bmp"));
+			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/triangle512x512.bmp"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/line64x64.bmp"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/greendragonBW64x64.bmp"));
 			//bi = ImageIO.read(new File("/Documents and Settings/stephen/My Documents/My Pictures/n64.jpg"));
@@ -189,7 +189,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 		Math.abs( (P3+2*P6+P9)-(P1+2*P4+P7) )
 		,255)
 		);*/
-		WritableRaster sobelWritableRaster =image.createCompatibleWritableRaster();
+		WritableRaster sobelWritableRaster =image.createCompatibleWritableRaster(image.getWidth()-2,image.getHeight()-2);
 		int[] P1 = {0};
 		int[] P2 = {0};
 		int[] P3 = {0};
@@ -201,9 +201,9 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 		
 		int[] Pout = {0};
 		
-		for(int i=0; i<image.getHeight();i++)
+		for(int i=1; i<image.getHeight()-1;i++)
 		{
-			for(int j=0; j<image.getWidth()-1;j++)
+			for(int j=1; j<image.getWidth()-1;j++)
 			{
 				int jLeft = j-1;
 				int jRight = j+1;
@@ -228,14 +228,20 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 				image.getPixel(jLeft  ,iTop    ,P7);
 				image.getPixel(j      ,iTop    ,P8);
 				image.getPixel(jRight ,iTop    ,P9);
+				int Px=(P3[0]+2*P6[0]+P9[0])-(P1[0]+2*P4[0]+P7[0]);
+				int Py=(P1[0]+2*P2[0]+P3[0])-(P7[0]+2*P8[0]+P9[0]);
 				Pout[0] =
 				Math.min(
-					Math.abs( (P1[0]+2*P2[0]+P3[0])-(P7[0]+2*P8[0]+P9[0]) )+
-					Math.abs( (P3[0]+2*P6[0]+P9[0])-(P1[0]+2*P4[0]+P7[0]) )
+					Math.abs( Px )+
+					Math.abs( Py )
 					,255);
-				sobelWritableRaster.setPixel(j,i,Pout);
+				sobelWritableRaster.setPixel(j-1,i-1,Pout);
 			}
 		}
+		this.w=image.getWidth()-2;
+		this.h=image.getHeight()-2;
+		this.widthField.setText(""+this.w);
+		this.heightField.setText(""+this.h);
 		return sobelWritableRaster;
 	}
 	public Raster Threashold(Raster image,int value)
@@ -609,7 +615,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 					if(format.equalsIgnoreCase("ambricFile"))
 					{
 						BufferedWriter data = new BufferedWriter(new FileWriter(saveFile));
-						Raster raster = bi.getRaster();
+						Raster raster = biFiltered.getRaster();
 						//data.write("#"+w+"x"+h+"\n");
 						for(int i=0;i<h;i++)
 						{
@@ -647,7 +653,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 										data.write("0");
 									data.write(Integer.toHexString(pixel[0]));
 									
-									data.write("\r\n");//windows line ending
+									data.write("\r");//windows line ending
 								}
 							}
 						}
@@ -729,11 +735,14 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 							while(lineStart == 35)//#
 							{
 								while((data.read())!=0xD){}//\r
-								data.skip(1);//\n
+								//data.skip(1);//\n
 								lineStart = data.read();
 							}
-							//if(lineStart!=48)//"0" // should be the lead zero
-							//	System.out.println("off at ("+i+","+j+")");
+							if(!(lineStart==49 || lineStart==48))//"0" or "1" // should be the lead zero
+							{
+								System.out.println("off at ("+i+","+j+") == "+ lineStart);
+							//	break;
+							}
 							if(bytes_per_line==4)
 							{
 								for(int k=0;k<4;k++)
@@ -790,7 +799,7 @@ public class AmbricDataConverter extends JPanel implements ActionListener
 								writableRaster.setPixel(j,i,Pixel);
 							}
 							//int lineEnd = data.read();
-							data.skip(2);
+							data.skip(1);
 							//skip newline carrage return
 						}
 					}
